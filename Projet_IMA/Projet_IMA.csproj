@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LocalisateurSpatial.cs" />
     <Compile Include="Couleur.cs" />
     <Compile Include="Ecran.cs" />
     <Compile Include="Form1.cs">

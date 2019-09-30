@@ -7,13 +7,7 @@ namespace Projet_IMA
 {
     static class ProjetEleve
     {
-        public struct SpatialLocator
-        {
-            public float x;
-            public float y;
-            public float z;
 
-        }
         public static void Go()
         {
 
