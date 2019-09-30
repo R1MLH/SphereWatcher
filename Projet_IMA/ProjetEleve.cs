@@ -53,7 +53,7 @@ namespace Projet_IMA
       
         }
 
-        public static void Sphere(float xpos, float ypos, float zpos, int rayon, Couleur color)
+        public static void Sphere(LocalisateurSpatial position, int rayon, Couleur color)
         {
 
             float pas = 0.02f;
@@ -61,8 +61,8 @@ namespace Projet_IMA
             {
                 for (float v = -1* ((float)Math.PI)/2.0f; v <= Math.PI/2; v+= pas)
                 {
-                    int x = (int)(rayon * Math.Cos(u) * Math.Cos(v) + xpos);
-                    int z = (int)(rayon * Math.Sin(v) + zpos);
+                    int x = (int)(rayon * Math.Cos(u) * Math.Cos(v) + position.X);
+                    int z = (int)(rayon * Math.Sin(v) + position.Z);
                     BitmapEcran.DrawPixel(x, z, color);
                 }
             }
@@ -82,14 +82,17 @@ namespace Projet_IMA
 
             float pas = 0.005f;
             int rayon = 200;
-            int xpos = 200, ypos = 0, zpos = 200;
+            LocalisateurSpatial positionSphere1 = new LocalisateurSpatial(200.0f, .0f, 200.0f);
+            LocalisateurSpatial positionSphere2 = new LocalisateurSpatial(350.0f, .0f, 200.0f);
+
+
             for (float u = 0; u <= 2 * Math.PI; u += pas)
             {
                 for (float v = -1 * ((float)Math.PI) / 2.0f; v <= Math.PI / 2; v += pas)
                 {
-                    int x = (int)(rayon * Math.Cos(u) * Math.Cos(v)) + xpos;
-                    float y = (rayon * ((float)Math.Cos(v)) * (float)Math.Sin(u)) + ypos;
-                    int z = (int)(rayon * Math.Sin(v)) + zpos;
+                    int x = (int)(rayon * Math.Cos(u) * Math.Cos(v) + positionSphere1.X);
+                    float y = (rayon * ((float)Math.Cos(v)) * (float)Math.Sin(u)) + positionSphere1.Y;
+                    int z = (int)(rayon * Math.Sin(v) + positionSphere1.Z);
                     if (y < ZBuffer[x, z])
                     {
                         ZBuffer[x, z] = y;
@@ -99,14 +102,13 @@ namespace Projet_IMA
                 }
             }
 
-            xpos = 350;
             for (float u = 0; u <= 2 * Math.PI; u += pas)
             {
                 for (float v = -1 * ((float)Math.PI) / 2.0f; v <= Math.PI / 2; v += pas)
                 {
-                    int x = (int)(rayon * Math.Cos(u) * Math.Cos(v)) + xpos;
-                    float y = (rayon * ((float)Math.Cos(v)) * (float)Math.Sin(u)) + ypos;
-                    int z = (int)(rayon * Math.Sin(v)) + zpos;
+                    int x = (int)(rayon * Math.Cos(u) * Math.Cos(v) + positionSphere2.X);
+                    float y = (rayon * ((float)Math.Cos(v)) * (float)Math.Sin(u) + positionSphere2.Y);
+                    int z = (int)(rayon * Math.Sin(v)+ positionSphere2.Z);
                     if (y < ZBuffer[x, z])
                         BitmapEcran.DrawPixel(x, z, Green);
 
@@ -127,14 +129,14 @@ namespace Projet_IMA
             Couleur blert = new Couleur(0.0f, 1.0f, 1.0f);
             Couleur noir = new Couleur(0.0f, 0.0f, 0.0f);
 
-            Sphere(rayon,0, rayon, rayon, LampColor * blanc);
+            /*Sphere(rayon,0, rayon, rayon, LampColor * blanc);
             Sphere(3*rayon,0, rayon, rayon, LampColor * rouge);
             Sphere(5* rayon, 0, rayon, rayon, LampColor * vouge);
             Sphere(7* rayon, 0, rayon, rayon, LampColor * vert);
             Sphere(9* rayon, 0, rayon, rayon, LampColor * blert);
             Sphere(11* rayon, 0, rayon, rayon, LampColor * bleu);
             Sphere(13*rayon, 0, rayon, rayon, LampColor * blouge);
-            Sphere(15*rayon, 0, rayon, rayon, LampColor * noir);
+            Sphere(15*rayon, 0, rayon, rayon, LampColor * noir);*/
 
 
         }
