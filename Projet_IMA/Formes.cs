@@ -16,6 +16,7 @@ namespace Projet_IMA
             this.position = position;
         }
 
+        public Couleur GetCouleur() { return couleur; }
         public abstract List<V3> GeneratePositions(float pas);
     }
 
