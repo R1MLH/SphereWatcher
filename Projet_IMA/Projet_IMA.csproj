@@ -63,6 +63,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Formes.cs" />
+    <Compile Include="Scene.cs" />
     <Compile Include="Lumiere.cs" />
     <Compile Include="Couleur.cs" />
     <Compile Include="Ecran.cs" />
