@@ -16,15 +16,19 @@ namespace Projet_IMA
             Couleur bizarre2 = new Couleur((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble());
             Couleur bizarre3 = new Couleur((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble());
             Couleur rouge = new Couleur(1.0f, 0.0f, 0.0f);
-            Scene scene1 = new Scene(blanc, 0.1f);
-            Sphere sphere1 = new Sphere(blanc, new V3(500.0f, 0, 300.0f), 200.0f);
-            //Sphere sphere2 = new Sphere(bizarre2, new V3(200.0f, 0, 300.0f), 200.0f);
-            Lumiere lampe = new Lumiere(blanc, 0.8f, new V3(1.0f, -1.0f, 1.0f));
-            //Lumiere lampe2 = new Lumiere(bizarre3, 0.8f, new V3(-1.0f,1.0f,-1.0f));
+
+            Scene scene1 = new Scene(blanc, 0.1f,100);
+
+            Sphere sphere1 = new Sphere(bizarre1, new V3(400.0f, 0, 300.0f), 200.0f);
             scene1.AddObjet(sphere1);
-            //scene1.AddObjet(sphere2);
+            Sphere sphere2 = new Sphere(bizarre2, new V3(100.0f, 0, 100.0f), 100.0f);
+            scene1.AddObjet(sphere2);
+            Sphere sphere3 = new Sphere(bizarre3, new V3(800.0f, 0, 400.0f), 50.0f);
+            scene1.AddObjet(sphere3);
+
+            Lumiere lampe = new Lumiere(blanc, 0.8f, new V3(1.0f, -1.0f, 1.0f));
             scene1.AddLampe(lampe);
-            //scene1.AddLampe(lampe2);
+
             scene1.Dessine();
         }
 
