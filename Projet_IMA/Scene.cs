@@ -46,26 +46,30 @@ namespace Projet_IMA
 
         public void Dessine()
         {
-            Lumiere monolumos = new Lumiere(new Couleur(1.0f, 1.0f, 1.0f), 0.8f, new V3(1.0f, -1.0f, 1.0f));
+
             float[,] ZBuffer = new float[BitmapEcran.GetWidth(), BitmapEcran.GetHeight()];
             for (int xz = 0; xz < BitmapEcran.GetWidth(); xz++)
                 for (int yz = 0; yz < BitmapEcran.GetHeight(); yz++)
                     ZBuffer[xz, yz] = float.MaxValue;
-            float pas = 0.01f;
+            float pas = 0.005f;
             foreach (Formes forme in objets)
             {
                 foreach (V3 point in forme.GeneratePositions(pas))
                 {
-                    if (point.y < ZBuffer[(int)point.x, (int)point.z])
+                    if (point.x < BitmapEcran.GetWidth() && point.z < BitmapEcran.GetHeight() && (point.y < ZBuffer[(int)point.x, (int)point.z]))
                     {
                         ZBuffer[(int)point.x, (int)point.z] = point.y;
-                        Couleur lumiereTotale = new Couleur(0, 0, 0);
-                        V3 normalPoint = point;
+                        V3 normalPoint = point-forme.GetPosition();
                         normalPoint.Normalize();
+                        
+                        Couleur lumiereTotale = new Couleur(0, 0, 0);
                         lumiereTotale += forme.GetCouleur() * couleurAmbiance * intensiteAmbiance;
-                        float facteurDiffus = monolumos.GetDirection() * normalPoint;
-                        lumiereTotale += forme.GetCouleur() * monolumos.GetCouleur() * facteurDiffus;
-                        //Couleur couleurPoint = forme.GetCouleur() *(monolumos.GetCouleur()*(point*monolumos.GetDirection())+(couleurAmbiance*intensiteAmbiance));
+                        foreach (Lumiere lampe in lampes)
+                        {
+                            lampe.GetDirection().Normalize();
+                            float facteurDiffus = Math.Max(0, normalPoint * lampe.GetDirection());
+                            lumiereTotale += forme.GetCouleur() * lampe.GetCouleur() * facteurDiffus;
+                        }
                         BitmapEcran.DrawPixel((int)point.x, (int)point.z, lumiereTotale);
                     }
                 }

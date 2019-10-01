@@ -18,6 +18,7 @@ namespace Projet_IMA
 
         public Couleur GetCouleur() { return couleur; }
         public abstract List<V3> GeneratePositions(float pas);
+        public V3 GetPosition() { return position; }
     }
 
     class Sphere : Formes
