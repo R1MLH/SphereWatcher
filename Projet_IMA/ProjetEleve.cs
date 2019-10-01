@@ -53,7 +53,7 @@ namespace Projet_IMA
       
         }
 
-        public static void Sphere(LocalisateurSpatial position, int rayon, Couleur color)
+        public static void Sphere(V3 position, int rayon, Couleur color)
         {
 
             float pas = 0.02f;
@@ -61,8 +61,8 @@ namespace Projet_IMA
             {
                 for (float v = -1* ((float)Math.PI)/2.0f; v <= Math.PI/2; v+= pas)
                 {
-                    int x = (int)(rayon * Math.Cos(u) * Math.Cos(v) + position.X);
-                    int z = (int)(rayon * Math.Sin(v) + position.Z);
+                    int x = (int)(rayon * Math.Cos(u) * Math.Cos(v) + position.x);
+                    int z = (int)(rayon * Math.Sin(v) + position.z);
                     BitmapEcran.DrawPixel(x, z, color);
                 }
             }
@@ -82,17 +82,17 @@ namespace Projet_IMA
 
             float pas = 0.005f;
             int rayon = 200;
-            LocalisateurSpatial positionSphere1 = new LocalisateurSpatial(200.0f, .0f, 200.0f);
-            LocalisateurSpatial positionSphere2 = new LocalisateurSpatial(350.0f, .0f, 200.0f);
+            V3 positionSphere1 = new V3(200.0f, .0f, 200.0f);
+            V3 positionSphere2 = new V3(350.0f, .0f, 200.0f);
 
 
             for (float u = 0; u <= 2 * Math.PI; u += pas)
             {
                 for (float v = -1 * ((float)Math.PI) / 2.0f; v <= Math.PI / 2; v += pas)
                 {
-                    int x = (int)(rayon * Math.Cos(u) * Math.Cos(v) + positionSphere1.X);
-                    float y = (rayon * ((float)Math.Cos(v)) * (float)Math.Sin(u)) + positionSphere1.Y;
-                    int z = (int)(rayon * Math.Sin(v) + positionSphere1.Z);
+                    int x = (int)(rayon * Math.Cos(u) * Math.Cos(v) + positionSphere1.x);
+                    float y = (rayon * ((float)Math.Cos(v)) * (float)Math.Sin(u)) + positionSphere1.y;
+                    int z = (int)(rayon * Math.Sin(v) + positionSphere1.z);
                     if (y < ZBuffer[x, z])
                     {
                         ZBuffer[x, z] = y;
@@ -106,9 +106,9 @@ namespace Projet_IMA
             {
                 for (float v = -1 * ((float)Math.PI) / 2.0f; v <= Math.PI / 2; v += pas)
                 {
-                    int x = (int)(rayon * Math.Cos(u) * Math.Cos(v) + positionSphere2.X);
-                    float y = (rayon * ((float)Math.Cos(v)) * (float)Math.Sin(u) + positionSphere2.Y);
-                    int z = (int)(rayon * Math.Sin(v)+ positionSphere2.Z);
+                    int x = (int)(rayon * Math.Cos(u) * Math.Cos(v) + positionSphere2.x);
+                    float y = (rayon * ((float)Math.Cos(v)) * (float)Math.Sin(u) + positionSphere2.y);
+                    int z = (int)(rayon * Math.Sin(v)+ positionSphere2.z);
                     if (y < ZBuffer[x, z])
                         BitmapEcran.DrawPixel(x, z, Green);
 

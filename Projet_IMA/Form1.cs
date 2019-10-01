@@ -32,7 +32,7 @@ namespace Projet_IMA
         private void button2_Click(object sender, EventArgs e)
         {
             BitmapEcran.RefreshScreen(new Couleur(0, 0, 0));
-            ProjetEleve.Sphere(new LocalisateurSpatial(200.0f,200.0f,200.0f),200,new Couleur(1.0f,0,0));
+            ProjetEleve.Sphere(new V3(200.0f,200.0f,200.0f),200,new Couleur(1.0f,0,0));
             BitmapEcran.Show();
         }
 
