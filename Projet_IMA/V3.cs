@@ -13,7 +13,7 @@ namespace Projet_IMA
 
         public float Norm()		// retourne la norme du vecteur
         {
-            return (float) IMA.Sqrtf(x * x + y * y + z * z);
+            return (float) Math.Sqrt(Norme2());
         }
 
         public float Norme2()

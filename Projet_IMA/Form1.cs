@@ -29,46 +29,5 @@ namespace Projet_IMA
             BitmapEcran.Show();          
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            BitmapEcran.RefreshScreen(new Couleur(0, 0, 0));
-            ProjetEleve.Sphere(200,200,200,200,new Couleur(1.0f,0,0));
-            BitmapEcran.Show();
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            BitmapEcran.RefreshScreen(new Couleur(0, 0, 0));
-            ProjetEleve.SphereZBuffer();
-            BitmapEcran.Show();
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            BitmapEcran.RefreshScreen(new Couleur(0.5f, 0.5f, 0.5f));
-            ProjetEleve.LightTesting(new Couleur(1.0f,1.0f,1.0f));
-            BitmapEcran.Show();
-            BitmapEcran.RefreshScreen(new Couleur(0.5f, 0.5f, 0.5f));
-            ProjetEleve.LightTesting(new Couleur(1.0f, 0.0f, 0.0f));
-            BitmapEcran.Show();
-            BitmapEcran.RefreshScreen(new Couleur(0.5f, 0.5f, 0.5f));
-            ProjetEleve.LightTesting(new Couleur(1.0f, 1.0f, 0.0f));
-            BitmapEcran.Show();
-            BitmapEcran.RefreshScreen(new Couleur(0.5f, 0.5f, 0.5f));
-            ProjetEleve.LightTesting(new Couleur(0.0f, 1.0f, 0.0f));
-            BitmapEcran.Show();
-            BitmapEcran.RefreshScreen(new Couleur(0.5f, 0.5f, 0.5f));
-            ProjetEleve.LightTesting(new Couleur(0.0f, 1.0f, 1.0f));
-            BitmapEcran.Show();
-            BitmapEcran.RefreshScreen(new Couleur(0.5f, 0.5f, 0.5f));
-            ProjetEleve.LightTesting(new Couleur(0.0f, 0.0f, 1.0f));
-            BitmapEcran.Show();
-            BitmapEcran.RefreshScreen(new Couleur(0.5f, 0.5f, 0.5f));
-            ProjetEleve.LightTesting(new Couleur(1.0f, 0.0f, 1.0f));
-            BitmapEcran.Show();
-            BitmapEcran.RefreshScreen(new Couleur(0.5f, 0.5f, 0.5f));
-            ProjetEleve.LightTesting(new Couleur(0.0f, 0.0f, 0.0f));
-            BitmapEcran.Show();
-        }
     }
 }
