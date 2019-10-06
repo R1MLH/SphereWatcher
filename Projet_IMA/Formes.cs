@@ -8,11 +8,13 @@ namespace Projet_IMA
     abstract class Formes
     {
         protected Texture texture;
+        protected Texture BumpMap;
         protected V3 position;
 
-        protected Formes(String textureLocation, V3 position)
+        protected Formes(String textureLocation,String bumpMapLocation, V3 position)
         {
             this.texture = new Texture(textureLocation);
+            this.BumpMap = new Texture(bumpMapLocation);
             this.position = position;
         }
 
@@ -24,7 +26,7 @@ namespace Projet_IMA
     {
         protected float rayon;
 
-        public Sphere(String textureLocation, V3 position, float rayon) : base(textureLocation,position)
+        public Sphere(String textureLocation, String bumpMapLocation, V3 position, float rayon) : base(textureLocation,bumpMapLocation, position)
         {
             this.rayon = rayon;
         }
@@ -42,9 +44,23 @@ namespace Projet_IMA
                     float localY = rayon * (float)(Math.Cos(v) * Math.Sin(u)) + this.position.y;
                     float localZ = rayon * (float)Math.Sin(v) + this.position.z;
 
+                    V3 dMdu = new V3((float)(-Math.Sin(u) * Math.Cos(v) * rayon),(float)(rayon * (float)(Math.Cos(u) * Math.Cos(v))), 0);
+                    V3 dMdv = new V3((float)(-Math.Sin(v) * Math.Cos(v) * rayon), (float)(rayon * (float)(-Math.Sin(u) * Math.Sin(v))), rayon*(float)Math.Cos(v));
+                    float dhdu,dhdv;
+                    BumpMap.Bump(u, v,out dhdu,out dhdv);
+
+                    V3 point = new V3(localX, localY, localZ);
+                    V3 normalPoint = new V3(point - position);
+                    normalPoint.Normalize();
+
+                    V3 T2 = dMdu ^ (dhdv * normalPoint);
+                    V3 T3 = dMdv ^ (dhdu * normalPoint);
+                    V3 normaleBump = normalPoint + 0.008f* (T2 + T3);
+                    normaleBump.Normalize();
                     float offsetU = u / (float)(Math.PI * 2);
                     float offsetV = (v+(float)(Math.PI/2)) / (float)(Math.PI);
-                    positions.Add(new PointColore(new V3(localX, localY, localZ), texture.LireCouleur(offsetU, offsetV)));
+
+                    positions.Add(new PointColore(point,normaleBump, texture.LireCouleur(offsetU, offsetV)));
 
                 }
             }

@@ -63,9 +63,8 @@ namespace Projet_IMA
                     if (point.GetLoc().x < BitmapEcran.GetWidth() && point.GetLoc().z < BitmapEcran.GetHeight() && (point.GetLoc().y < ZBuffer[(int)point.GetLoc().x, (int)point.GetLoc().z]))
                     {
                         ZBuffer[(int)point.GetLoc().x, (int)point.GetLoc().z] = point.GetLoc().y;
-                        V3 normalPoint = new V3(point.GetLoc() - forme.GetPosition());
-                        normalPoint.Normalize();
 
+                        V3 normalPoint = point.GetNormale();
                         V3 directionOculaire = new V3(camera - point.GetLoc());
                         directionOculaire.Normalize();
                         
