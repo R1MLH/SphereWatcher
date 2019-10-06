@@ -7,33 +7,32 @@ namespace Projet_IMA
 {
     abstract class Formes
     {
-        protected Couleur couleur;
+        protected Texture texture;
         protected V3 position;
 
-        protected Formes(Couleur couleur, V3 position)
+        protected Formes(String textureLocation, V3 position)
         {
-            this.couleur = couleur;
+            this.texture = new Texture(textureLocation);
             this.position = position;
         }
 
-        public Couleur GetCouleur() { return couleur; }
-        public abstract List<V3> GeneratePositions(float pas);
+        public abstract List<PointColore> GeneratePositions(float pas);
         public V3 GetPosition() { return position; }
     }
 
     class Sphere : Formes
     {
-        float rayon;
+        protected float rayon;
 
-        public Sphere(Couleur couleur, V3 position, float rayon) : base(couleur,position)
+        public Sphere(String textureLocation, V3 position, float rayon) : base(textureLocation,position)
         {
             this.rayon = rayon;
         }
 
-        public override List<V3> GeneratePositions(float pas)
+        public override List<PointColore> GeneratePositions(float pas)
         {
             
-            List<V3> positions = new List<V3>();
+            List<PointColore> positions = new List<PointColore>();
 
             for (float u = 0; u <= 2 * Math.PI; u += pas)
             {
@@ -43,7 +42,9 @@ namespace Projet_IMA
                     float localY = rayon * (float)(Math.Cos(v) * Math.Sin(u)) + this.position.y;
                     float localZ = rayon * (float)Math.Sin(v) + this.position.z;
 
-                    positions.Add(new V3(localX, localY, localZ));
+                    float offsetU = u / (float)(Math.PI * 2);
+                    float offsetV = (v+(float)(Math.PI/2)) / (float)(Math.PI);
+                    positions.Add(new PointColore(new V3(localX, localY, localZ), texture.LireCouleur(offsetU, offsetV)));
 
                 }
             }
