@@ -53,7 +53,7 @@ namespace Projet_IMA
             for (int xz = 0; xz < BitmapEcran.GetWidth(); xz++)
                 for (int yz = 0; yz < BitmapEcran.GetHeight(); yz++)
                     ZBuffer[xz, yz] = float.MaxValue;
-            float pas = 0.005f;
+            float pas = 0.015f;
 
             V3 camera = new V3((float)BitmapEcran.GetWidth() / 2,(float) BitmapEcran.GetWidth() * -1.5f, (float)BitmapEcran.GetHeight() / 2);
             foreach (Formes forme in objets)

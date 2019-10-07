@@ -26,6 +26,9 @@ namespace Projet_IMA
             Sphere sphere3 = new Sphere("lead.jpg","lead_bump.jpg", new V3(800.0f, 0, 400.0f), 120.0f);
             scene1.AddObjet(sphere3);
 
+            Quadrilatere quad1 = new Quadrilatere("fibre.jpg", "bump1.jpg", new V3(800.0f, 0, 100.0f), new V3(800.0f, 0, 300.0f), new V3(950.0f, 0, 100.0f));
+            scene1.AddObjet(quad1);
+
             Lumiere lampe = new Lumiere(blanc, 0.8f, new V3(1.0f, -1.0f, 1.0f));
             scene1.AddLampe(lampe);
 
