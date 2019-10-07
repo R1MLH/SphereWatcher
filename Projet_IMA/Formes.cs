@@ -44,10 +44,13 @@ namespace Projet_IMA
                     float localY = rayon * (float)(Math.Cos(v) * Math.Sin(u)) + this.position.y;
                     float localZ = rayon * (float)Math.Sin(v) + this.position.z;
 
+                    float offsetU = u / (float)(Math.PI * 2);
+                    float offsetV = (v + (float)(Math.PI / 2)) / (float)(Math.PI);
+
                     V3 dMdu = new V3((float)(-Math.Sin(u) * Math.Cos(v) * rayon),(float)(rayon * (float)(Math.Cos(u) * Math.Cos(v))), 0);
                     V3 dMdv = new V3((float)(-Math.Sin(v) * Math.Cos(v) * rayon), (float)(rayon * (float)(-Math.Sin(u) * Math.Sin(v))), rayon*(float)Math.Cos(v));
                     float dhdu,dhdv;
-                    BumpMap.Bump(u, v,out dhdu,out dhdv);
+                    BumpMap.Bump(offsetU, offsetV,out dhdu,out dhdv);
 
                     V3 point = new V3(localX, localY, localZ);
                     V3 normalPoint = new V3(point - position);
@@ -57,8 +60,6 @@ namespace Projet_IMA
                     V3 T3 = dMdv ^ (dhdu * normalPoint);
                     V3 normaleBump = normalPoint + 0.008f* (T2 + T3);
                     normaleBump.Normalize();
-                    float offsetU = u / (float)(Math.PI * 2);
-                    float offsetV = (v+(float)(Math.PI/2)) / (float)(Math.PI);
 
                     positions.Add(new PointColore(point,normaleBump, texture.LireCouleur(offsetU, offsetV)));
 
