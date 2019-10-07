@@ -97,9 +97,9 @@ namespace Projet_IMA
 
             List<PointColore> positions = new List<PointColore>();
 
-            for (float u = 0; u < AB.Norm(); u += pas)
+            for (float u = 0; u < AB.Norm(); u += 50*pas)
             {
-                for (float v = 0; v < AC.Norm(); v += pas)
+                for (float v = 0; v < AC.Norm(); v += 50*pas)
                 {
                    
 
