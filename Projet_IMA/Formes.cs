@@ -18,7 +18,14 @@ namespace Projet_IMA
             this.position = position;
         }
 
-        public abstract List<PointColore> GeneratePositions(float pas);
+        protected Formes(Couleur chroma,String bumpMapLocation,V3 position)
+        {
+            this.texture = new MonoTexture(chroma);
+            this.BumpMap = new Texture(bumpMapLocation);
+            this.position = position;
+        }
+
+        public abstract List<PointColore> GeneratePositions();
         public V3 GetPosition() { return position; }
     }
 
@@ -31,9 +38,14 @@ namespace Projet_IMA
             this.rayon = rayon;
         }
 
-        public override List<PointColore> GeneratePositions(float pas)
+        public Sphere(Couleur chroma, String bumpMapLocation, V3 position, float rayon) : base(chroma,bumpMapLocation,position)
         {
-            
+            this.rayon = rayon;
+        }
+
+        public override List<PointColore> GeneratePositions()
+        {
+            float pas = 1 / (this.rayon);
             List<PointColore> positions = new List<PointColore>();
 
             for (float u = 0; u <= 2 * Math.PI; u += pas)
@@ -57,7 +69,7 @@ namespace Projet_IMA
                     normalPoint.Normalize();
 
                     V3 T2 = dMdu ^ (dhdv * normalPoint);
-                    V3 T3 = dMdv ^ (dhdu * normalPoint);
+                    V3 T3 = (dhdu * normalPoint) ^ dMdv;
                     V3 normaleBump = normalPoint + 0.008f* (T2 + T3);
                     normaleBump.Normalize();
 
@@ -69,5 +81,69 @@ namespace Projet_IMA
             return positions;
         }
 
+    }
+
+    class Quadrilatere : Formes
+    {
+        V3 pointB;
+        V3 pointC;
+
+        public Quadrilatere(string textureLocation, string bumpMapLocation, V3 pointA, V3 pointB, V3 pointC) : base(textureLocation, bumpMapLocation, pointA)
+        {
+            this.pointB = pointB;
+            this.pointC = pointC;
+        }
+
+        public Quadrilatere(Couleur chroma, string bumpMapLocation, V3 pointA, V3 pointB, V3 pointC) : base(chroma, bumpMapLocation, pointA)
+        {
+            this.pointB = pointB;
+            this.pointC = pointC;
+        }
+
+        public override List<PointColore> GeneratePositions()
+        {
+            float pas = 1;
+            V3 AB = new V3(pointB - position);
+            V3 ABNormalise = new V3(AB);
+            ABNormalise.Normalize();
+
+            V3 AC = new V3(pointC - position);
+            V3 ACNormalise = new V3(AC);
+            ACNormalise.Normalize();
+
+            V3 normal = new V3(AB ^ AC);
+            normal.Normalize();
+
+            List<PointColore> positions = new List<PointColore>();
+
+            for (float u = 0; u < AB.Norm(); u += pas)
+            {
+                for (float v = 0; v < AC.Norm(); v += pas)
+                {
+                   
+
+                    float offsetU = u / AB.Norm();
+                    float offsetV = v / AC.Norm();
+
+
+                    V3 dMdu = AB; 
+                    V3 dMdv = AC; 
+
+                    float dhdu, dhdv;
+                    BumpMap.Bump(offsetU, offsetV, out dhdu, out dhdv);
+
+                    V3 point = new V3(position + (u*ABNormalise) + (v*ACNormalise));
+                    
+
+                    V3 T2 = dMdu ^ (dhdv * normal);
+                    V3 T3 = (dhdu * normal) ^ dMdv;
+                    V3 normaleBump = normal + 0.08f * (T2 + T3);
+                    normaleBump.Normalize();
+
+                    positions.Add(new PointColore(point, normaleBump, texture.LireCouleur(offsetU, offsetV)));
+                }
+            }
+            return positions;
+        }
     }
 }

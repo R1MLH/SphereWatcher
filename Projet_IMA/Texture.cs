@@ -16,7 +16,7 @@ namespace Projet_IMA
         // public functions
         // u,v compris entre 0 et 1
 
-        public Couleur LireCouleur(float u, float v)
+        public virtual Couleur LireCouleur(float u, float v)
         {
             return Interpol(Largeur * u, Hauteur * v);
         }
@@ -101,5 +101,19 @@ namespace Projet_IMA
             + C[x, ypu] * (1 - ccx) * ccy
             + C[xpu, ypu] * ccx * ccy;*/
         }
-    }    
+    }
+
+    class MonoTexture : Texture
+    {
+        Couleur Couleur;
+        public MonoTexture(Couleur monochrome) : base("n")
+        {
+            this.Couleur = monochrome;
+        }
+
+        public override Couleur LireCouleur(float u, float v)
+        {
+            return this.Couleur;
+        } 
+    }
 }
