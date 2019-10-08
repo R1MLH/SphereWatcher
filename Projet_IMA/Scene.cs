@@ -66,7 +66,7 @@ namespace Projet_IMA
 
                         V3 normalPoint = point.GetNormale();
                         V3 directionOculaire = new V3(camera - point.GetLoc());
-                        directionOculaire.Normalize();
+                        //directionOculaire.Normalize();
                         
                         Couleur lumiereTotale = new Couleur(0, 0, 0);
                         lumiereTotale += point.GetCouleur() * couleurAmbiance * intensiteAmbiance;
@@ -79,10 +79,9 @@ namespace Projet_IMA
                             float facteurDiffus = Math.Max(0, cosAlpha);
                             lumiereTotale += point.GetCouleur() * lampe.GetCouleur() * facteurDiffus;
 
-                            V3 reflet = (cosAlpha * (point.GetLoc() - forme.GetPosition())) - directionLampeNormale;
-                            reflet.Normalize();
-
-                            float facteurSpeculaire = (float)Math.Pow(Math.Max((directionOculaire * reflet),0), puissanceSpeculaire);
+                            V3 reflet = (2 * cosAlpha * normalPoint) - directionLampeNormale;
+                            float produitSpeculaire = Math.Max(0,(reflet * directionOculaire)/(reflet.Norm()*directionOculaire.Norm()));
+                            float facteurSpeculaire = (float)Math.Pow(produitSpeculaire, puissanceSpeculaire);
                             lumiereTotale += lampe.GetCouleur() * facteurSpeculaire;
                         }
                         BitmapEcran.DrawPixel((int)point.GetLoc().x, (int)point.GetLoc().z, lumiereTotale);

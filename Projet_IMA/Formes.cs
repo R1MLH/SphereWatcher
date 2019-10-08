@@ -18,6 +18,13 @@ namespace Projet_IMA
             this.position = position;
         }
 
+        protected Formes(Couleur chroma,String bumpMapLocation,V3 position)
+        {
+            this.texture = new MonoTexture(chroma);
+            this.BumpMap = new Texture(bumpMapLocation);
+            this.position = position;
+        }
+
         public abstract List<PointColore> GeneratePositions();
         public V3 GetPosition() { return position; }
     }
@@ -27,6 +34,11 @@ namespace Projet_IMA
         protected float rayon;
 
         public Sphere(String textureLocation, String bumpMapLocation, V3 position, float rayon) : base(textureLocation,bumpMapLocation, position)
+        {
+            this.rayon = rayon;
+        }
+
+        public Sphere(Couleur chroma, String bumpMapLocation, V3 position, float rayon) : base(chroma,bumpMapLocation,position)
         {
             this.rayon = rayon;
         }
@@ -57,7 +69,7 @@ namespace Projet_IMA
                     normalPoint.Normalize();
 
                     V3 T2 = dMdu ^ (dhdv * normalPoint);
-                    V3 T3 = dMdv ^ (dhdu * normalPoint);
+                    V3 T3 = (dhdu * normalPoint) ^ dMdv;
                     V3 normaleBump = normalPoint + 0.008f* (T2 + T3);
                     normaleBump.Normalize();
 
@@ -77,6 +89,12 @@ namespace Projet_IMA
         V3 pointC;
 
         public Quadrilatere(string textureLocation, string bumpMapLocation, V3 pointA, V3 pointB, V3 pointC) : base(textureLocation, bumpMapLocation, pointA)
+        {
+            this.pointB = pointB;
+            this.pointC = pointC;
+        }
+
+        public Quadrilatere(Couleur chroma, string bumpMapLocation, V3 pointA, V3 pointB, V3 pointC) : base(chroma, bumpMapLocation, pointA)
         {
             this.pointB = pointB;
             this.pointC = pointC;
@@ -108,8 +126,8 @@ namespace Projet_IMA
                     float offsetV = v / AC.Norm();
 
 
-                    V3 dMdu = ABNormalise; //TODO
-                    V3 dMdv = ACNormalise; //TODO
+                    V3 dMdu = AB; 
+                    V3 dMdv = AC; 
 
                     float dhdu, dhdv;
                     BumpMap.Bump(offsetU, offsetV, out dhdu, out dhdv);
@@ -118,8 +136,8 @@ namespace Projet_IMA
                     
 
                     V3 T2 = dMdu ^ (dhdv * normal);
-                    V3 T3 = dMdv ^ (dhdu * normal);
-                    V3 normaleBump = normal + 0.008f * (T2 + T3);
+                    V3 T3 = (dhdu * normal) ^ dMdv;
+                    V3 normaleBump = normal + 0.08f * (T2 + T3);
                     normaleBump.Normalize();
 
                     positions.Add(new PointColore(point, normaleBump, texture.LireCouleur(offsetU, offsetV)));
