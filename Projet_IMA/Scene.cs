@@ -31,10 +31,10 @@ namespace Projet_IMA
             for (int xz = 0; xz < BitmapEcran.GetWidth(); xz++)
                 for (int yz = 0; yz < BitmapEcran.GetHeight(); yz++)
                     ZBuffer[xz, yz] = float.MaxValue;
-            float pas = 0.01f;
+            
             foreach(Formes forme in objets)
             {
-                foreach(PointColore point in forme.GeneratePositions(pas))
+                foreach(PointColore point in forme.GeneratePositions())
                 {
                     if (point.GetLoc().y < ZBuffer[(int)point.GetLoc().x, (int)point.GetLoc().z])
                     {
@@ -58,7 +58,7 @@ namespace Projet_IMA
             V3 camera = new V3((float)BitmapEcran.GetWidth() / 2,(float) BitmapEcran.GetWidth() * -1.5f, (float)BitmapEcran.GetHeight() / 2);
             foreach (Formes forme in objets)
             {
-                foreach (PointColore point in forme.GeneratePositions(pas))
+                foreach (PointColore point in forme.GeneratePositions())
                 {
                     if (point.GetLoc().x < BitmapEcran.GetWidth() && point.GetLoc().z < BitmapEcran.GetHeight() && (point.GetLoc().y < ZBuffer[(int)point.GetLoc().x, (int)point.GetLoc().z]))
                     {
@@ -75,7 +75,7 @@ namespace Projet_IMA
                             V3 directionLampeNormale = new V3(lampe.GetDirection());
                             directionLampeNormale.Normalize();
 
-                            float cosAlpha = normalPoint * directionLampeNormale;
+                            float cosAlpha =  normalPoint * directionLampeNormale;
                             float facteurDiffus = Math.Max(0, cosAlpha);
                             lumiereTotale += point.GetCouleur() * lampe.GetCouleur() * facteurDiffus;
 

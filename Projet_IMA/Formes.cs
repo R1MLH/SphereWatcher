@@ -18,7 +18,7 @@ namespace Projet_IMA
             this.position = position;
         }
 
-        public abstract List<PointColore> GeneratePositions(float pas);
+        public abstract List<PointColore> GeneratePositions();
         public V3 GetPosition() { return position; }
     }
 
@@ -31,9 +31,9 @@ namespace Projet_IMA
             this.rayon = rayon;
         }
 
-        public override List<PointColore> GeneratePositions(float pas)
+        public override List<PointColore> GeneratePositions()
         {
-            
+            float pas = 1 / (this.rayon);
             List<PointColore> positions = new List<PointColore>();
 
             for (float u = 0; u <= 2 * Math.PI; u += pas)
@@ -82,8 +82,9 @@ namespace Projet_IMA
             this.pointC = pointC;
         }
 
-        public override List<PointColore> GeneratePositions(float pas)
+        public override List<PointColore> GeneratePositions()
         {
+            float pas = 1;
             V3 AB = new V3(pointB - position);
             V3 ABNormalise = new V3(AB);
             ABNormalise.Normalize();
@@ -97,9 +98,9 @@ namespace Projet_IMA
 
             List<PointColore> positions = new List<PointColore>();
 
-            for (float u = 0; u < AB.Norm(); u += 50*pas)
+            for (float u = 0; u < AB.Norm(); u += pas)
             {
-                for (float v = 0; v < AC.Norm(); v += 50*pas)
+                for (float v = 0; v < AC.Norm(); v += pas)
                 {
                    
 
