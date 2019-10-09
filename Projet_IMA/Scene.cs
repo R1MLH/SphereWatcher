@@ -100,6 +100,7 @@ namespace Projet_IMA
                 {
                     V3 pixel = new V3((float)x_ecran, 0, (float)y_ecran);
                     V3 rayon = pixel - camera;
+                    rayon.Normalize();
                     Couleur c = Raycast(camera,rayon);
                     BitmapEcran.DrawPixel(x_ecran, y_ecran, c);
 
@@ -109,7 +110,11 @@ namespace Projet_IMA
 
         public Couleur Raycast(V3 camera, V3 rayon)
         {
+            foreach(Formes objet: objets)
             return new Couleur(1, 1, 1);
+            {
+
+            }
         }
     }
 }

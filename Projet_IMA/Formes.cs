@@ -26,6 +26,7 @@ namespace Projet_IMA
         }
 
         public abstract List<PointColore> GeneratePositions();
+        public abstract float IntersectRayon(V3 camera, V3 rayon);
         public V3 GetPosition() { return position; }
     }
 
@@ -41,6 +42,37 @@ namespace Projet_IMA
         public Sphere(Couleur chroma, String bumpMapLocation, V3 position, float rayon) : base(chroma,bumpMapLocation,position)
         {
             this.rayon = rayon;
+        }
+
+        public override float IntersectRayon(V3 camera, V3 rayon)
+        {
+            //(R0 + tRd -C)² = r²
+            // t²Rd² + t(2RdR0-2CRd) + (C² - 2CR0 -r²) = 0
+
+            float A = rayon * rayon;
+            float B = (2 * (rayon * camera) - 2 * (this.position * rayon));
+            float C = ((this.position * this.position) - (2 * (this.position * camera)) - this.rayon * this.rayon);
+            float delta = (B * B) - (4 * A * C);
+
+            if(delta > 0)
+            {
+                float t1 = (-B - (float)Math.Sqrt(delta)) / (2 * A);
+                float t2 = (-B + (float)Math.Sqrt(delta)) / (2 * A);
+                if(t1 > 0)
+                {
+                    return t1;
+                }
+                else if (t2>0)
+                {
+                    return t2;
+                }
+               
+            }
+            return -1;
+            
+
+            throw new NotImplementedException();
+
         }
 
         public override List<PointColore> GeneratePositions()
@@ -98,6 +130,35 @@ namespace Projet_IMA
         {
             this.pointB = pointB;
             this.pointC = pointC;
+        }
+
+        public override float IntersectRayon(V3 camera, V3 rayon)
+        {
+            // A + alpha AB + beta AC
+            V3 AB = new V3(pointB - position);
+            V3 ABNormalise = new V3(AB);
+            ABNormalise.Normalize();
+
+            V3 AC = new V3(pointC - position);
+            V3 ACNormalise = new V3(AC);
+            ACNormalise.Normalize();
+
+            V3 normal = new V3(AB ^ AC);
+            normal.Normalize();
+
+            float t = ((position - camera) * normal) / (rayon * normal);
+            V3 I = new V3(camera + t * rayon);
+            V3 AI = new V3(I - position);
+
+            float alpha = (AI * AB) / (AB * AB);
+            float beta = (AI * AC) / (AC * AC);
+
+            if( alpha >=0 && alpha <= 1 && beta >= 0 && beta <= 1)
+            {
+                return t;
+            }
+            return -1;
+
         }
 
         public override List<PointColore> GeneratePositions()
