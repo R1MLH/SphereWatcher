@@ -53,7 +53,6 @@ namespace Projet_IMA
             for (int xz = 0; xz < BitmapEcran.GetWidth(); xz++)
                 for (int yz = 0; yz < BitmapEcran.GetHeight(); yz++)
                     ZBuffer[xz, yz] = float.MaxValue;
-            float pas = 0.005f;
 
             V3 camera = new V3((float)BitmapEcran.GetWidth() / 2,(float) BitmapEcran.GetWidth() * -1.5f, (float)BitmapEcran.GetHeight() / 2);
             foreach (Formes forme in objets)
@@ -89,6 +88,28 @@ namespace Projet_IMA
                 }
             }
 
+        }
+
+        public void DessineRaycast()
+        {
+            V3 camera = new V3((float)BitmapEcran.GetWidth() / 2, (float)BitmapEcran.GetWidth() * -1.5f, (float)BitmapEcran.GetHeight() / 2);
+
+            for ( int x_ecran = 0; x_ecran < BitmapEcran.GetWidth(); x_ecran++)
+            {
+                for( int y_ecran = 0; y_ecran < BitmapEcran.GetHeight(); y_ecran++)
+                {
+                    V3 pixel = new V3((float)x_ecran, 0, (float)y_ecran);
+                    V3 rayon = pixel - camera;
+                    Couleur c = Raycast(camera,rayon);
+                    BitmapEcran.DrawPixel(x_ecran, y_ecran, c);
+
+                }
+            }
+        }
+
+        public Couleur Raycast(V3 camera, V3 rayon)
+        {
+            return new Couleur(1, 1, 1);
         }
     }
 }
