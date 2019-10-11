@@ -19,10 +19,10 @@ namespace Projet_IMA
 
             Scene scene1 = new Scene(blanc, 0.1f,50);
 
-            Sphere sphere1 = new Sphere("gold.jpg", "bump38.jpg", new V3(200.0f, 0.0f, 200.0f), 100.0f);
+            Sphere sphere1 = new Sphere("carreau.jpg", "bump38.jpg", new V3(200.0f, 0.0f, 200.0f), 100.0f);
             scene1.AddObjet(sphere1);
-            Sphere sphere2 = new Sphere("lead.jpg", "bump38.jpg", new V3(350.0f, 0.0f, 200.0f), 100.0f);
-            scene1.AddObjet(sphere2);
+            //Sphere sphere2 = new Sphere("lead.jpg", "bump38.jpg", new V3(350.0f, 0.0f, 200.0f), 100.0f);
+            //scene1.AddObjet(sphere2);
 
             Quadrilatere quad1 = new Quadrilatere("brick01.jpg", "bump38.jpg", new V3(650.0f, 1000.0f, 100.0f), new V3(750.0f, 10, 100.0f), new V3(650.0f, 1000.0f, 300.0f));
             scene1.AddObjet(quad1);

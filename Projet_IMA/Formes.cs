@@ -124,7 +124,7 @@ namespace Projet_IMA
         {
             V3 point = camera + (intersection * directionOculaire);
             
-            IMA.Invert_Coord_Spherique(point, this.rayon, out float u, out float v);
+            IMA.Invert_Coord_Spherique(point-this.position, this.rayon, out float u, out float v);
 
             float offsetU = u / (float)(Math.PI * 2);
             float offsetV = (v + (float)(Math.PI / 2)) / (float)(Math.PI);
