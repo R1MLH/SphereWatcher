@@ -94,6 +94,8 @@ namespace Projet_IMA
         {
             V3 camera = new V3((float)BitmapEcran.GetWidth() / 2, (float)BitmapEcran.GetWidth() * -1.5f, (float)BitmapEcran.GetHeight() / 2);
 
+            int xmax = BitmapEcran.GetWidth();
+            int ymax = BitmapEcran.GetHeight();
             for ( int x_ecran = 0; x_ecran < BitmapEcran.GetWidth(); x_ecran++)
             {
                 for( int y_ecran = 0; y_ecran < BitmapEcran.GetHeight(); y_ecran++)
@@ -110,11 +112,21 @@ namespace Projet_IMA
 
         public Couleur Raycast(V3 camera, V3 rayon)
         {
-            foreach(Formes objet: objets)
-            return new Couleur(1, 1, 1);
-            {
-
+            Dictionary<float, Formes> intersections = new Dictionary<float, Formes>();
+            foreach(Formes objet in objets){
+                float intersect = objet.IntersectRayon(camera, rayon);
+                if( intersect >= 0 && !(intersections.Keys.Contains(intersect)))
+                {
+                    intersections.Add(intersect, objet);
+                }
             }
+
+            if (intersections.Keys.Count == 0)
+            {
+                return new Couleur(0, 0, 0);
+            }
+            else return new Couleur(1, 1, 1);
+
         }
     }
 }

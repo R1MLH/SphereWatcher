@@ -27,6 +27,7 @@ namespace Projet_IMA
 
         public abstract List<PointColore> GeneratePositions();
         public abstract float IntersectRayon(V3 camera, V3 rayon);
+       // public abstract PointColore GetCouleurIntersect();
         public V3 GetPosition() { return position; }
     }
 
@@ -50,14 +51,14 @@ namespace Projet_IMA
             // t²Rd² + t(2RdR0-2CRd) + (C² - 2CR0 -r²) = 0
 
             float A = rayon * rayon;
-            float B = (2 * (rayon * camera) - 2 * (this.position * rayon));
-            float C = ((this.position * this.position) - (2 * (this.position * camera)) - this.rayon * this.rayon);
+            float B = ((2 * (rayon * camera)) - (2 * (this.position * rayon)));
+            float C = ((this.position * this.position) - (2 * (this.position * camera)) - (this.rayon * this.rayon));
             float delta = (B * B) - (4 * A * C);
 
             if(delta > 0)
             {
-                float t1 = (-B - (float)Math.Sqrt(delta)) / (2 * A);
-                float t2 = (-B + (float)Math.Sqrt(delta)) / (2 * A);
+                float t1 = ((-B) - ((float)Math.Sqrt(delta))) / (2 * A);
+                float t2 = ((-B) + ((float)Math.Sqrt(delta))) / (2 * A);
                 if(t1 > 0)
                 {
                     return t1;
@@ -74,6 +75,8 @@ namespace Projet_IMA
             throw new NotImplementedException();
 
         }
+
+        
 
         public override List<PointColore> GeneratePositions()
         {
