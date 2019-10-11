@@ -19,17 +19,16 @@ namespace Projet_IMA
 
             Scene scene1 = new Scene(blanc, 0.1f,50);
 
-            Sphere sphere1 = new Sphere("fibre.jpg", "bump38.jpg", new V3(400.0f, 50000, 300.0f), 100.0f);
+            Sphere sphere1 = new Sphere("gold.jpg", "bump38.jpg", new V3(200.0f, 0.0f, 200.0f), 100.0f);
             scene1.AddObjet(sphere1);
-            //Sphere sphere2 = new Sphere("carreau.jpg","bump38.jpg", new V3(10000.0f, 10000, 100000.0f), 1.0f);
-            //scene1.AddObjet(sphere2);
-            //Sphere sphere3 = new Sphere("lead.jpg","lead_bump.jpg", new V3(0.0f, 10000.0f, 0.0f), 1.0f);
-            //scene1.AddObjet(sphere3);
+            Sphere sphere2 = new Sphere("lead.jpg", "bump38.jpg", new V3(350.0f, 0.0f, 200.0f), 100.0f);
+            scene1.AddObjet(sphere2);
 
-            Quadrilatere quad1 = new Quadrilatere("lead.jpg", "lead_bump.jpg", new V3(650.0f, 1000.0f, 100.0f), new V3(750.0f, 10, 100.0f), new V3(650.0f, 1000.0f, 300.0f));
+            Quadrilatere quad1 = new Quadrilatere("brick01.jpg", "bump38.jpg", new V3(650.0f, 1000.0f, 100.0f), new V3(750.0f, 10, 100.0f), new V3(650.0f, 1000.0f, 300.0f));
             scene1.AddObjet(quad1);
-            //Quadrilatere quad2 = new Quadrilatere(blanc, "n", new V3(0, 0, 0), new V3(900.0f, 1000,0), new V3(0, 1000.0f, 1000.0f));
-            //scene1.AddObjet(quad2);
+
+            Quadrilatere quad3 = new Quadrilatere(rouge, "n", new V3(0, 0, 0), new V3(10, 0, 0), new V3(0, 0, 10));
+            scene1.AddObjet(quad3);
 
             Lumiere key = new Lumiere(blanc, 0.48f, new V3(1.0f, -1.0f, 1.0f));
             scene1.AddLampe(key);

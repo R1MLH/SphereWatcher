@@ -66,24 +66,7 @@ namespace Projet_IMA
                         V3 normalPoint = point.GetNormale();
                         V3 directionOculaire = new V3(camera - point.GetLoc());
                         //directionOculaire.Normalize();
-                        
-                        Couleur lumiereTotale = new Couleur(0, 0, 0);
-                        lumiereTotale += point.GetCouleur() * couleurAmbiance * intensiteAmbiance;
-                        foreach (Lumiere lampe in lampes)
-                        {
-                            V3 directionLampeNormale = new V3(lampe.GetDirection());
-                            directionLampeNormale.Normalize();
-
-                            float cosAlpha =  normalPoint * directionLampeNormale;
-                            float facteurDiffus = Math.Max(0, cosAlpha);
-                            lumiereTotale += point.GetCouleur() * lampe.GetCouleur() * facteurDiffus;
-
-                            V3 reflet = (2 * cosAlpha * normalPoint) - directionLampeNormale;
-                            float produitSpeculaire = Math.Max(0,(reflet * directionOculaire)/(reflet.Norm()*directionOculaire.Norm()));
-                            float facteurSpeculaire = (float)Math.Pow(produitSpeculaire, puissanceSpeculaire);
-                            lumiereTotale += lampe.GetCouleur() * facteurSpeculaire;
-                        }
-                        BitmapEcran.DrawPixel((int)point.GetLoc().x, (int)point.GetLoc().z, lumiereTotale);
+                        BitmapEcran.DrawPixel((int)point.GetLoc().x, (int)point.GetLoc().z, processLumiere(directionOculaire,point));
                     }
                 }
             }
@@ -125,8 +108,36 @@ namespace Projet_IMA
             {
                 return new Couleur(0, 0, 0);
             }
-            else return new Couleur(1, 1, 1);
-
+            float minT = intersections.Keys.Min();
+            PointColore point = intersections[minT].GetCouleurIntersect(camera,rayon, minT);
+            return processLumiere(rayon, point);
         }
+
+
+        public Couleur processLumiere(V3 rayon, PointColore point)
+        {
+            V3 normalPoint = point.GetNormale();
+            //V3 directionOculaire = new V3(camera - point.GetLoc());
+            //directionOculaire.Normalize();
+
+            Couleur lumiereTotale = new Couleur(0, 0, 0);
+            lumiereTotale += point.GetCouleur() * couleurAmbiance * intensiteAmbiance;
+            foreach (Lumiere lampe in lampes)
+            {
+                V3 directionLampeNormale = new V3(lampe.GetDirection());
+                directionLampeNormale.Normalize();
+
+                float cosAlpha = normalPoint * directionLampeNormale;
+                float facteurDiffus = Math.Max(0, cosAlpha);
+                lumiereTotale += point.GetCouleur() * lampe.GetCouleur() * facteurDiffus;
+
+                V3 reflet = (2 * cosAlpha * normalPoint) - directionLampeNormale;
+                float produitSpeculaire = Math.Max(0, (reflet * rayon) / (reflet.Norm() * rayon.Norm()));
+                float facteurSpeculaire = (float)Math.Pow(produitSpeculaire, puissanceSpeculaire);
+                lumiereTotale += lampe.GetCouleur() * facteurSpeculaire;
+            }
+            return lumiereTotale;
+        }
+
     }
 }
