@@ -26,6 +26,8 @@ namespace Projet_IMA
         }
 
         public abstract List<PointColore> GeneratePositions();
+        public abstract float IntersectRayon(V3 camera, V3 directionOculaire);
+        public abstract PointColore GetCouleurIntersect(V3 camera,V3 directionOculaire, float intersection);
         public V3 GetPosition() { return position; }
     }
 
@@ -42,6 +44,44 @@ namespace Projet_IMA
         {
             this.rayon = rayon;
         }
+
+        public override float IntersectRayon(V3 camera, V3 directionOculaire)
+        {
+            //(R0 + tRd -C)² = r²
+            // t²Rd² + t(2RdR0-2CRd) + (C² - 2CR0 -r² + R0²) = 0
+
+            float A = (directionOculaire * directionOculaire); // (Rd²)
+
+            float B = ((2 * (camera * directionOculaire)) - (2*(this.position * directionOculaire))); //(2RdR0 -2CRd)
+            float C = ((camera * camera) + (this.position * this.position) +(-2* (this.position * camera)) + (-1*(rayon * rayon))); // (C²+R0²-r² -2CR0)
+            float delta = (B * B) - (4 * A * C);
+
+            if(delta > 0)
+            {
+                float t1 = ((-B) - ((float)Math.Sqrt(delta))) / (2 * A);
+                float t2 = ((-B) + ((float)Math.Sqrt(delta))) / (2 * A);
+                if(t1 > 0 && t2 > 0)
+                {
+                    return (float)Math.Min(t1,t2);
+                }
+                else if (t1>0 && t2 <=0)
+                {
+                    return t1;
+                }
+                else if (t2 > 0 && t1 <= 0)
+                {
+                    return t2;
+                }
+
+            }
+            return -1;
+            
+
+            throw new NotImplementedException();
+
+        }
+
+        
 
         public override List<PointColore> GeneratePositions()
         {
@@ -80,6 +120,30 @@ namespace Projet_IMA
 
             return positions;
         }
+        public override PointColore GetCouleurIntersect(V3 camera, V3 directionOculaire, float intersection)
+        {
+            V3 point = camera + (intersection * directionOculaire);
+            
+            IMA.Invert_Coord_Spherique(point-this.position, this.rayon, out float u, out float v);
+
+            float offsetU = u / (float)(Math.PI * 2);
+            float offsetV = (v + (float)(Math.PI / 2)) / (float)(Math.PI);
+
+            V3 dMdu = new V3((float)(-Math.Sin(u) * Math.Cos(v) * rayon), (float)(rayon * (float)(Math.Cos(u) * Math.Cos(v))), 0);
+            V3 dMdv = new V3((float)(-Math.Sin(v) * Math.Cos(v) * rayon), (float)(rayon * (float)(-Math.Sin(u) * Math.Sin(v))), rayon * (float)Math.Cos(v));
+            float dhdu, dhdv;
+            BumpMap.Bump(offsetU, offsetV, out dhdu, out dhdv);
+
+            //V3 point = new V3(localX, localY, localZ);
+            V3 normalPoint = new V3(point - position);
+            normalPoint.Normalize();
+
+            V3 T2 = dMdu ^ (dhdv * normalPoint);
+            V3 T3 = (dhdu * normalPoint) ^ dMdv;
+            V3 normaleBump = normalPoint + 0.008f * (T2 + T3);
+            normaleBump.Normalize();
+            return new PointColore(point, normaleBump, texture.LireCouleur(offsetU, offsetV));
+        }
 
     }
 
@@ -98,6 +162,35 @@ namespace Projet_IMA
         {
             this.pointB = pointB;
             this.pointC = pointC;
+        }
+
+        public override float IntersectRayon(V3 camera, V3 directionOculaire)
+        {
+            // A + alpha AB + beta AC
+            V3 AB = new V3(pointB - position);
+            V3 ABNormalise = new V3(AB);
+            ABNormalise.Normalize();
+
+            V3 AC = new V3(pointC - position);
+            V3 ACNormalise = new V3(AC);
+            ACNormalise.Normalize();
+
+            V3 normal = new V3(AB ^ AC);
+            normal.Normalize();
+
+            float t = ((position - camera) * normal) / (directionOculaire * normal);
+            V3 I = new V3(camera + t * directionOculaire);
+            V3 AI = new V3(I - position);
+
+            float alpha = (AI * AB) / (AB * AB);
+            float beta = (AI * AC) / (AC * AC);
+
+            if( alpha >=0 && alpha <= 1 && beta >= 0 && beta <= 1)
+            {
+                return t;
+            }
+            return -1;
+
         }
 
         public override List<PointColore> GeneratePositions()
@@ -145,5 +238,40 @@ namespace Projet_IMA
             }
             return positions;
         }
+
+        public override PointColore GetCouleurIntersect(V3 camera, V3 directionOculaire, float intersection)
+        {
+            V3 point = new V3(camera + intersection * directionOculaire);
+            V3 AI = new V3(point - position);
+
+            V3 AB = new V3(pointB - position);
+            V3 ABNormalise = new V3(AB);
+            ABNormalise.Normalize();
+
+            V3 AC = new V3(pointC - position);
+            V3 ACNormalise = new V3(AC);
+            ACNormalise.Normalize();
+
+            V3 normal = new V3(AB ^ AC);
+            normal.Normalize();
+
+            float alpha = (AI * AB) / (AB * AB);
+            float beta = (AI * AC) / (AC * AC);
+
+            V3 dMdu = AB;
+            V3 dMdv = AC;
+
+            float dhdu, dhdv;
+            BumpMap.Bump(alpha, beta, out dhdu, out dhdv);
+
+            V3 T2 = dMdu ^ (dhdv * normal);
+            V3 T3 = (dhdu * normal) ^ dMdv;
+            V3 normaleBump = normal + 0.08f * (T2 + T3);
+            normaleBump.Normalize();
+
+            return new PointColore(point, normaleBump, texture.LireCouleur(alpha, beta));
+
+        }
+
     }
 }
