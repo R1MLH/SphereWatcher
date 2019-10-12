@@ -124,19 +124,39 @@ namespace Projet_IMA
             lumiereTotale += point.GetCouleur() * couleurAmbiance * intensiteAmbiance;
             foreach (Lumiere lampe in lampes)
             {
-                V3 directionLampeNormale = new V3(lampe.GetDirection());
-                directionLampeNormale.Normalize();
+                if (!isOccluded(point, lampe.GetDirection()))
+                {
+                    V3 directionLampeNormale = new V3(lampe.GetDirection());
+                    directionLampeNormale.Normalize();
 
-                float cosAlpha = normalPoint * directionLampeNormale;
-                float facteurDiffus = Math.Max(0, cosAlpha);
-                lumiereTotale += point.GetCouleur() * lampe.GetCouleur() * facteurDiffus;
+                    float cosAlpha = normalPoint * directionLampeNormale;
+                    float facteurDiffus = Math.Max(0, cosAlpha);
+                    lumiereTotale += point.GetCouleur() * lampe.GetCouleur() * facteurDiffus;
 
-                V3 reflet = (2 * cosAlpha * normalPoint) - directionLampeNormale;
-                float produitSpeculaire = Math.Max(0, (reflet * rayon) / (reflet.Norm() * rayon.Norm()));
-                float facteurSpeculaire = (float)Math.Pow(produitSpeculaire, puissanceSpeculaire);
-                lumiereTotale += lampe.GetCouleur() * facteurSpeculaire;
+                    V3 reflet = (2 * cosAlpha * normalPoint) - directionLampeNormale;
+                    float produitSpeculaire = Math.Max(0, (reflet * rayon) / (reflet.Norm() * rayon.Norm()));
+                    float facteurSpeculaire = (float)Math.Pow(produitSpeculaire, puissanceSpeculaire);
+                    lumiereTotale += lampe.GetCouleur() * facteurSpeculaire;
+                }
             }
             return lumiereTotale;
+        }
+
+        public bool isOccluded(PointColore origine,V3 rayon)
+        {
+           
+            foreach (Formes objet in objets)
+            {
+                if (objet != origine.getOwner())
+                {
+                    float intersect = objet.IntersectRayon(origine.GetLoc(), rayon);
+                    if (intersect >= 0)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
     }

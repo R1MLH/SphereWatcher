@@ -21,14 +21,14 @@ namespace Projet_IMA
 
             Sphere sphere1 = new Sphere("carreau.jpg", "bump38.jpg", new V3(200.0f, 0.0f, 200.0f), 100.0f);
             scene1.AddObjet(sphere1);
-            //Sphere sphere2 = new Sphere("lead.jpg", "bump38.jpg", new V3(350.0f, 0.0f, 200.0f), 100.0f);
-            //scene1.AddObjet(sphere2);
+            Sphere sphere2 = new Sphere("lead.jpg", "bump38.jpg", new V3(350.0f, - 150.0f, 350.0f), 50.0f);
+            scene1.AddObjet(sphere2);
 
             Quadrilatere quad1 = new Quadrilatere("brick01.jpg", "bump38.jpg", new V3(650.0f, 1000.0f, 100.0f), new V3(750.0f, 10, 100.0f), new V3(650.0f, 1000.0f, 300.0f));
             scene1.AddObjet(quad1);
 
-            Quadrilatere quad3 = new Quadrilatere(rouge, "n", new V3(0, 0, 0), new V3(10, 0, 0), new V3(0, 0, 10));
-            scene1.AddObjet(quad3);
+            //Quadrilatere quad3 = new Quadrilatere(rouge, "n", new V3(0, 0, 0), new V3(10, 0, 0), new V3(0, 0, 10));
+            //scene1.AddObjet(quad3);
 
             Lumiere key = new Lumiere(blanc, 0.48f, new V3(1.0f, -1.0f, 1.0f));
             scene1.AddLampe(key);

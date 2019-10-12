@@ -113,7 +113,7 @@ namespace Projet_IMA
                     V3 normaleBump = normalPoint + 0.008f* (T2 + T3);
                     normaleBump.Normalize();
 
-                    positions.Add(new PointColore(point,normaleBump, texture.LireCouleur(offsetU, offsetV)));
+                    positions.Add(new PointColore(point, normaleBump, texture.LireCouleur(offsetU, offsetV),this));
 
                 }
             }
@@ -134,7 +134,6 @@ namespace Projet_IMA
             float dhdu, dhdv;
             BumpMap.Bump(offsetU, offsetV, out dhdu, out dhdv);
 
-            //V3 point = new V3(localX, localY, localZ);
             V3 normalPoint = new V3(point - position);
             normalPoint.Normalize();
 
@@ -142,7 +141,7 @@ namespace Projet_IMA
             V3 T3 = (dhdu * normalPoint) ^ dMdv;
             V3 normaleBump = normalPoint + 0.008f * (T2 + T3);
             normaleBump.Normalize();
-            return new PointColore(point, normaleBump, texture.LireCouleur(offsetU, offsetV));
+            return new PointColore(point, normaleBump, texture.LireCouleur(offsetU, offsetV),this);
         }
 
     }
@@ -233,7 +232,7 @@ namespace Projet_IMA
                     V3 normaleBump = normal + 0.08f * (T2 + T3);
                     normaleBump.Normalize();
 
-                    positions.Add(new PointColore(point, normaleBump, texture.LireCouleur(offsetU, offsetV)));
+                    positions.Add(new PointColore(point, normaleBump, texture.LireCouleur(offsetU, offsetV),this));
                 }
             }
             return positions;
@@ -269,7 +268,7 @@ namespace Projet_IMA
             V3 normaleBump = normal + 0.08f * (T2 + T3);
             normaleBump.Normalize();
 
-            return new PointColore(point, normaleBump, texture.LireCouleur(alpha, beta));
+            return new PointColore(point, normaleBump, texture.LireCouleur(alpha, beta),this);
 
         }
 
