@@ -27,6 +27,15 @@ namespace Projet_IMA
             Quadrilatere quad1 = new Quadrilatere("brick01.jpg", "bump38.jpg", new V3(650.0f, 1000.0f, 100.0f), new V3(750.0f, 10, 100.0f), new V3(650.0f, 1000.0f, 300.0f));
             scene1.AddObjet(quad1);
 
+            Quadrilatere sol = new Quadrilatere("carreau.jpg", "n", new V3(0.0f, 0.0f, 0.0f), new V3(1000.0f, 0.0f, 0.0f), new V3(0.0f, 1000.0f, 0.0f));
+            scene1.AddObjet(sol);
+
+            Quadrilatere mur = new Quadrilatere("carreau.jpg", "n", new V3(0.0f, 0.0f, 0.0f), new V3(0.0f, 1000.0f, 0.0f), new V3(0.0f, 0.0f, 1000.0f));
+            scene1.AddObjet(mur);
+
+            Quadrilatere mur2 = new Quadrilatere("carreau.jpg", "n", new V3(0.0f, 1000.0f, 0.0f), new V3(1000.0f, 1000.0f, 0.0f),new V3(0.0f, 1000.0f,1000.0f));
+            scene1.AddObjet(mur2);
+
             //Quadrilatere quad3 = new Quadrilatere(rouge, "n", new V3(0, 0, 0), new V3(10, 0, 0), new V3(0, 0, 10));
             //scene1.AddObjet(quad3);
 
