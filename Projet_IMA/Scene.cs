@@ -124,9 +124,9 @@ namespace Projet_IMA
             lumiereTotale += point.GetCouleur() * couleurAmbiance * intensiteAmbiance;
             foreach (Lumiere lampe in lampes)
             {
-                if (!isOccluded(point, lampe.GetDirection()))
+                if (!(lampe.isOccluded(point,objets)))
                 {
-                    V3 directionLampeNormale = new V3(lampe.GetDirection());
+                    V3 directionLampeNormale = new V3(lampe.GetDirection(point.GetLoc()));
                     directionLampeNormale.Normalize();
 
                     float cosAlpha = normalPoint * directionLampeNormale;
@@ -142,22 +142,7 @@ namespace Projet_IMA
             return lumiereTotale;
         }
 
-        public bool isOccluded(PointColore origine,V3 rayon)
-        {
-           
-            foreach (Formes objet in objets)
-            {
-                if (objet != origine.getOwner())
-                {
-                    float intersect = objet.IntersectRayon(origine.GetLoc(), rayon);
-                    if (intersect >= 0)
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
+
 
     }
 }

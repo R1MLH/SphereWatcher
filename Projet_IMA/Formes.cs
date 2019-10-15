@@ -265,7 +265,7 @@ namespace Projet_IMA
 
             V3 T2 = dMdu ^ (dhdv * normal);
             V3 T3 = (dhdu * normal) ^ dMdv;
-            V3 normaleBump = normal + 0.08f * (T2 + T3);
+            V3 normaleBump = normal + 0.008f * (T2 + T3);
             normaleBump.Normalize();
 
             return new PointColore(point, normaleBump, texture.LireCouleur(alpha, beta),this);

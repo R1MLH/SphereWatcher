@@ -18,6 +18,7 @@ namespace Projet_IMA
 
         public Couleur GetCouleur() { return Couleur*intensite; }
         public abstract V3 GetDirection(V3 point);
+        public abstract bool isOccluded(PointColore point,List<Formes> objets);
     }
 
     class LampeDirectionelle : Lumiere
@@ -32,6 +33,22 @@ namespace Projet_IMA
         public override V3 GetDirection(V3 point)
         {
             return this.direction;
+        }
+
+        public override bool isOccluded(PointColore point, List<Formes> objets)
+        {
+            foreach (Formes objet in objets)
+            {
+                if (objet != point.getOwner())
+                {
+                    float intersect = objet.IntersectRayon(point.GetLoc(), this.direction);
+                    if (intersect >= 0)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     }
 
@@ -48,9 +65,26 @@ namespace Projet_IMA
 
         public override V3 GetDirection(V3 point)
         {
-            V3 sens = point - this.position;
+            V3 sens =  this.position - point;
             sens.Normalize();
             return sens;
+        }
+
+        public override bool isOccluded(PointColore point, List<Formes> objets)
+        {
+            foreach (Formes objet in objets)
+            {
+                if (objet != point.getOwner())
+                {
+                    float intermax = (this.position - point.GetLoc()).Norm();
+                    float intersect = objet.IntersectRayon(point.GetLoc(), this.GetDirection(point.GetLoc()));
+                    if (intersect >= 0 && intersect <= intermax)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     }
 
