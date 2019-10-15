@@ -16,7 +16,8 @@ namespace Projet_IMA
             this.intensite = intensite;
         }
 
-        public Couleur GetCouleur() { return Couleur*intensite; }
+        public virtual Couleur GetCouleur() { return Couleur; }
+        public virtual float GetIntensite(V3 point) { return this.intensite; }
         public abstract V3 GetDirection(V3 point);
         public abstract bool isOccluded(PointColore point,List<Formes> objets);
     }
@@ -85,6 +86,12 @@ namespace Projet_IMA
                 }
             }
             return false;
+        }
+
+        public override float GetIntensite(V3 point)
+        {
+            float distance = (this.position - point).Norm();
+            return (this.intensite/(1+(decay*(distance*distance))));
         }
     }
 

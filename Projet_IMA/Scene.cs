@@ -131,12 +131,12 @@ namespace Projet_IMA
 
                     float cosAlpha = normalPoint * directionLampeNormale;
                     float facteurDiffus = Math.Max(0, cosAlpha);
-                    lumiereTotale += point.GetCouleur() * lampe.GetCouleur() * facteurDiffus;
+                    lumiereTotale += point.GetCouleur() * lampe.GetCouleur() * facteurDiffus*lampe.GetIntensite(point.GetLoc());
 
                     V3 reflet = (2 * cosAlpha * normalPoint) - directionLampeNormale;
                     float produitSpeculaire = Math.Max(0, (reflet * (-rayon)) / (reflet.Norm() * rayon.Norm()));
                     float facteurSpeculaire = (float)Math.Pow(produitSpeculaire, puissanceSpeculaire);
-                    lumiereTotale += lampe.GetCouleur() * facteurSpeculaire;
+                    lumiereTotale += lampe.GetCouleur()*lampe.GetIntensite(point.GetLoc()) * facteurSpeculaire;
                 }
             }
             return lumiereTotale;
