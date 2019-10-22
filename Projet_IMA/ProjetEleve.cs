@@ -50,7 +50,9 @@ namespace Projet_IMA
             Lumiere back = new Lumiere(blanc, 0.2f, new V3(-1.0f, 1.0f, -1.0f));
             scene1.AddLampe(back);*/
 
-            Lumiere centrale = new LampePonctuelle(blanc, 0.7f, new V3(650.0f, 500.0f, 500.0f), 0.0001f);
+            Lumiere centrale = new LampePonctuelle(blanc, 0.5f, new V3(650.0f, 900.0f, 500.0f), 0.001f);
+            scene1.AddLampe(centrale);
+            centrale = new LampePonctuelle(blanc, 0.7f, new V3(250.0f, 900.0f, 500.0f), 0.001f);
             scene1.AddLampe(centrale);
 
             scene1.DessineRaycast();

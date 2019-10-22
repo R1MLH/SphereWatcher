@@ -91,7 +91,7 @@ namespace Projet_IMA
         public override float GetIntensite(V3 point)
         {
             float distance = (this.position - point).Norm();
-            return (this.intensite/(1+(decay*(distance*distance))));
+            return Math.Max(0,(this.intensite - (decay*distance)));
         }
     }
 
