@@ -273,4 +273,131 @@ namespace Projet_IMA
         }
 
     }
-}
+
+    class Triangle : Formes
+    {
+        V3 pointB;
+        V3 pointC;
+
+        public Triangle(string textureLocation, string bumpMapLocation, V3 pointA, V3 pointB, V3 pointC) : base(textureLocation, bumpMapLocation, pointA)
+        {
+            this.pointB = pointB;
+            this.pointC = pointC;
+        }
+
+        public Triangle(Couleur chroma, string bumpMapLocation, V3 pointA, V3 pointB, V3 pointC) : base(chroma, bumpMapLocation, pointA)
+        {
+            this.pointB = pointB;
+            this.pointC = pointC;
+        }
+
+        public override float IntersectRayon(V3 camera, V3 directionOculaire)
+        {
+            // A + alpha AB + beta AC
+            V3 AB = new V3(pointB - position);
+            V3 ABNormalise = new V3(AB);
+            ABNormalise.Normalize();
+
+            V3 AC = new V3(pointC - position);
+            V3 ACNormalise = new V3(AC);
+            ACNormalise.Normalize();
+
+            V3 normal = new V3(AB ^ AC);
+            normal.Normalize();
+
+            float t = ((position - camera) * normal) / (directionOculaire * normal);
+            V3 I = new V3(camera + t * directionOculaire);
+            V3 AI = new V3(I - position);
+
+            float alpha = (AI * AB) / (AB * AB);
+            float beta = (AI * AC) / (AC * AC);
+
+            if (alpha + beta >= 0 && alpha +beta <= 1 && beta >= 0 && beta <= 1 && alpha >= 0 && alpha <= 1)
+            {
+                return t;
+            }
+            return -1;
+
+        }
+
+        public override List<PointColore> GeneratePositions()
+        {
+            float pas = 1;
+            V3 AB = new V3(pointB - position);
+            V3 ABNormalise = new V3(AB);
+            ABNormalise.Normalize();
+
+            V3 AC = new V3(pointC - position);
+            V3 ACNormalise = new V3(AC);
+            ACNormalise.Normalize();
+
+            V3 normal = new V3(AB ^ AC);
+            normal.Normalize();
+
+            List<PointColore> positions = new List<PointColore>();
+
+            for (float u = 0; u < AB.Norm(); u += pas)
+            {
+                for (float v = 0; v < AC.Norm(); v += pas)
+                {
+
+
+                    float offsetU = u / AB.Norm();
+                    float offsetV = v / AC.Norm();
+
+
+                    V3 dMdu = AB;
+                    V3 dMdv = AC;
+
+                    float dhdu, dhdv;
+                    BumpMap.Bump(offsetU, offsetV, out dhdu, out dhdv);
+
+                    V3 point = new V3(position + (u * ABNormalise) + (v * ACNormalise));
+
+
+                    V3 T2 = dMdu ^ (dhdv * normal);
+                    V3 T3 = (dhdu * normal) ^ dMdv;
+                    V3 normaleBump = normal + 0.08f * (T2 + T3);
+                    normaleBump.Normalize();
+
+                    positions.Add(new PointColore(point, normaleBump, texture.LireCouleur(offsetU, offsetV), this));
+                }
+            }
+            return positions;
+        }
+
+        public override PointColore GetCouleurIntersect(V3 camera, V3 directionOculaire, float intersection)
+        {
+            V3 point = new V3(camera + intersection * directionOculaire);
+            V3 AI = new V3(point - position);
+
+            V3 AB = new V3(pointB - position);
+            V3 ABNormalise = new V3(AB);
+            ABNormalise.Normalize();
+
+            V3 AC = new V3(pointC - position);
+            V3 ACNormalise = new V3(AC);
+            ACNormalise.Normalize();
+
+            V3 normal = new V3(AB ^ AC);
+            normal.Normalize();
+
+            float alpha = (AI * AB) / (AB * AB);
+            float beta = (AI * AC) / (AC * AC);
+
+            V3 dMdu = AB;
+            V3 dMdv = AC;
+
+            float dhdu, dhdv;
+            BumpMap.Bump(alpha, beta, out dhdu, out dhdv);
+
+            V3 T2 = dMdu ^ (dhdv * normal);
+            V3 T3 = (dhdu * normal) ^ dMdv;
+            V3 normaleBump = normal + 0.08f * (T2 + T3);
+            normaleBump.Normalize();
+
+            return new PointColore(point, normaleBump, texture.LireCouleur(alpha, beta), this);
+
+        }
+    }
+    }

@@ -40,6 +40,9 @@ namespace Projet_IMA
             Quadrilatere mur2 = new Quadrilatere("carreau.jpg", "n", new V3(0.0f, 1000.0f, 0.0f), new V3(1000.0f, 1000.0f, 0.0f),new V3(0.0f, 1000.0f,1000.0f));
             scene1.AddObjet(mur2);
 
+            Triangle t1 = new Triangle("carreau.jpg", "n", new V3(500.0f, 500.0f, 200.0f), new V3(350.0f, 500.0f, 300.0f),new V3(750.0f, 500.0f, 300.0f));
+            scene1.AddObjet(t1);
+
             //Quadrilatere quad3 = new Quadrilatere(rouge, "n", new V3(0, 0, 0), new V3(10, 0, 0), new V3(0, 0, 10));
             //scene1.AddObjet(quad3);
 
