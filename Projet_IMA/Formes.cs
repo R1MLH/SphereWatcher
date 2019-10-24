@@ -291,6 +291,13 @@ namespace Projet_IMA
             this.pointC = pointC;
         }
 
+        public void Rescale(float factor)
+        {
+            this.position = this.position * factor;
+            this.pointB = this.pointB * factor;
+            this.pointC = this.pointC * factor;
+        }
+
         public override float IntersectRayon(V3 camera, V3 directionOculaire)
         {
             // A + alpha AB + beta AC
@@ -309,10 +316,11 @@ namespace Projet_IMA
             V3 I = new V3(camera + t * directionOculaire);
             V3 AI = new V3(I - position);
 
-            float alpha = (AI * AB) / (AB * AB);
-            float beta = (AI * AC) / (AC * AC);
+            float alpha = (AI * AB) / (AB.Norm()*AB.Norm());
+            float beta = (AI * AC) / (AC.Norm()*AC.Norm());
 
-            if (alpha + beta >= 0 && alpha +beta <= 1 && beta >= 0 && beta <= 1 && alpha >= 0 && alpha <= 1)
+           
+            if ( ((alpha + beta) >= 0) && ((alpha +beta) <= 1) && (beta >= 0) && (beta <= 1) && (alpha >= 0) &&( alpha < 1))
             {
                 return t;
             }
@@ -382,8 +390,9 @@ namespace Projet_IMA
             V3 normal = new V3(AB ^ AC);
             normal.Normalize();
 
-            float alpha = (AI * AB) / (AB * AB);
-            float beta = (AI * AC) / (AC * AC);
+            float beta = (AI * AC) / (AC.Norm() * AC.Norm());
+            float alpha = (AI * AB) / (AB.Norm() * AB.Norm());
+
 
             V3 dMdu = AB;
             V3 dMdv = AC;

@@ -18,7 +18,7 @@ namespace Projet_IMA
             Couleur rouge = new Couleur(1.0f, 0.0f, 0.0f);
 
             Scene scene1 = new Scene(blanc, 0.1f,50);
-
+            /*
             Sphere sphere1 = new Sphere("carreau.jpg", "bump38.jpg", new V3(200.0f, 0.0f, 200.0f), 100.0f);
             scene1.AddObjet(sphere1);
             Sphere sphere2 = new Sphere("lead.jpg", "bump38.jpg", new V3(350.0f, - 150.0f, 350.0f), 50.0f);
@@ -41,7 +41,7 @@ namespace Projet_IMA
             scene1.AddObjet(mur2);
 
             Triangle t1 = new Triangle("carreau.jpg", "n", new V3(500.0f, 500.0f, 200.0f), new V3(350.0f, 500.0f, 300.0f),new V3(750.0f, 500.0f, 300.0f));
-            scene1.AddObjet(t1);
+            scene1.AddObjet(t1);*/
 
             //Quadrilatere quad3 = new Quadrilatere(rouge, "n", new V3(0, 0, 0), new V3(10, 0, 0), new V3(0, 0, 10));
             //scene1.AddObjet(quad3);
@@ -53,11 +53,27 @@ namespace Projet_IMA
             Lumiere back = new Lumiere(blanc, 0.2f, new V3(-1.0f, 1.0f, -1.0f));
             scene1.AddLampe(back);*/
 
-            Lumiere centrale = new LampePonctuelle(blanc, 0.5f, new V3(650.0f, 900.0f, 500.0f), 0.001f);
+            /*Lumiere centrale = new LampePonctuelle(blanc, 0.5f, new V3(650.0f, 900.0f, 500.0f), 0.001f);
             scene1.AddLampe(centrale);
-            centrale = new LampePonctuelle(blanc, 0.7f, new V3(250.0f, 900.0f, 500.0f), 0.001f);
-            scene1.AddLampe(centrale);
-
+             centrale = new LampePonctuelle(blanc, 0.7f, new V3(250.0f, 900.0f, 500.0f), 0.001f);
+            scene1.AddLampe(centrale);*/
+            Triangle t1 = new Triangle("carreau.jpg", "n", new V3(500.0f, 500.0f, 200.0f), new V3(350.0f, 500.0f, 300.0f), new V3(750.0f, 500.0f, 300.0f));
+            scene1.AddObjet(t1);
+            Sphere s1 = new Sphere(blanc, "n", new V3(500.0f, 500.0f, 200.0f), 10.0f);
+            Sphere s2 = new Sphere(blanc, "n", new V3(350.0f, 500.0f, 300.0f), 10.0f);
+            Sphere s3 = new Sphere(blanc, "n", new V3(750.0f, 500.0f, 300.0f), 10.0f);
+            scene1.AddObjet(s1);
+            scene1.AddObjet(s2);
+            scene1.AddObjet(s3);
+            Lumiere lumiere = new LampeDirectionelle(blanc, 0.8f, new V3(1.0f, -1.0f, 1.0f));
+            scene1.AddLampe(lumiere);
+            /*
+            Mesh shrek = new Mesh("CHARACTER_Shrek.obj");
+            shrek.Rescale(300.0f);
+            foreach(Triangle t in shrek.GetPolygons())
+            {
+                scene1.AddObjet(t);
+            }*/
             scene1.DessineRaycast();
         }
 
