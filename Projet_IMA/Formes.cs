@@ -11,6 +11,13 @@ namespace Projet_IMA
         protected Texture BumpMap;
         protected V3 position;
 
+        protected Formes(Texture t, String bp, V3 position)
+        {
+            this.texture = t;
+            this.BumpMap = new Texture(bp);
+            this.position = position;
+        }
+
         protected Formes(String textureLocation,String bumpMapLocation, V3 position)
         {
             this.texture = new Texture(textureLocation);
@@ -278,17 +285,42 @@ namespace Projet_IMA
     {
         V3 pointB;
         V3 pointC;
+        V3 textureA;
+        V3 textureB;
+        V3 textureC;
+
 
         public Triangle(string textureLocation, string bumpMapLocation, V3 pointA, V3 pointB, V3 pointC) : base(textureLocation, bumpMapLocation, pointA)
         {
             this.pointB = pointB;
             this.pointC = pointC;
+            this.textureA = new V3(0, 0, 0);
+            this.textureB = new V3(0, 1, 0);
+            this.textureC = new V3(1, 0, 0);
+        }
+
+        public Triangle(Texture tex, V3 pointA, V3 pointB, V3 pointC, V3 texA,V3 texB, V3 texC) : base(tex,"n",pointA) {
+            this.pointB = pointB;
+            this.pointC = pointC;
+            this.textureA = texA;
+            this.textureB = texB;
+            this.textureC = texC;
         }
 
         public Triangle(Couleur chroma, string bumpMapLocation, V3 pointA, V3 pointB, V3 pointC) : base(chroma, bumpMapLocation, pointA)
         {
             this.pointB = pointB;
             this.pointC = pointC;
+            this.textureA = new V3(0, 0, 0);
+            this.textureB = new V3(0, 1, 0);
+            this.textureC = new V3(1, 0, 0);
+        }
+
+        public void Translate(V3 translator)
+        {
+            this.position = this.position + translator;
+            this.pointB = this.pointB + translator;
+            this.pointC = this.pointC + translator;
         }
 
         public void Rescale(float factor)
@@ -316,8 +348,11 @@ namespace Projet_IMA
             V3 I = new V3(camera + t * directionOculaire);
             V3 AI = new V3(I - position);
 
-            float alpha = (AI * AB) / (AB.Norm()*AB.Norm());
-            float beta = (AI * AC) / (AC.Norm()*AC.Norm());
+            V3 ABprojector = AC ^ normal;
+            V3 ACprojector = normal ^ AB;
+
+            float alpha = (AI * ABprojector) / (AB*ABprojector);
+            float beta = (AI * ACprojector) / (AC*ACprojector);
 
            
             if ( ((alpha + beta) >= 0) && ((alpha +beta) <= 1) && (beta >= 0) && (beta <= 1) && (alpha >= 0) &&( alpha < 1))
@@ -405,7 +440,9 @@ namespace Projet_IMA
             V3 normaleBump = normal + 0.08f * (T2 + T3);
             normaleBump.Normalize();
 
-            return new PointColore(point, normaleBump, texture.LireCouleur(alpha, beta), this);
+            V3 positionCouleur = textureA + (alpha * (textureB - textureA) + beta * (textureC - textureA));
+
+            return new PointColore(point, normaleBump, texture.LireCouleur(positionCouleur.x, positionCouleur.y), this);
 
         }
     }
