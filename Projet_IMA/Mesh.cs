@@ -53,7 +53,7 @@ namespace Projet_IMA
                     string[] item1 = items[1].Split('/');
                     string[] item2 = items[2].Split('/');
                     string[] item3 = items[3].Split('/');
-                    if (item1[1] != "" && item2[1] != "" && item2[3] != "")
+                    if ((item1.Count() > 1) && (item1[1] != "") && (item2[1] != "") && (item2[1] != ""))
                     {
                         Polygons.Add(new Triangle(this.texture,
                                               vertices[(int.Parse(item1[0])) - 1], vertices[(int.Parse(item2[0])) - 1], vertices[(int.Parse(item3[0]) - 1)],
