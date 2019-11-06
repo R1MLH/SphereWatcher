@@ -288,6 +288,11 @@ namespace Projet_IMA
         V3 textureA;
         V3 textureB;
         V3 textureC;
+        V3 AB;
+        V3 ABNormalise;
+        V3 AC;
+        V3 ACNormalise;
+        V3 normal;
 
 
         public Triangle(string textureLocation, string bumpMapLocation, V3 pointA, V3 pointB, V3 pointC) : base(textureLocation, bumpMapLocation, pointA)
@@ -297,6 +302,16 @@ namespace Projet_IMA
             this.textureA = new V3(0, 0, 0);
             this.textureB = new V3(0, 1, 0);
             this.textureC = new V3(1, 0, 0);
+            AB = new V3(pointB - position);
+            ABNormalise = new V3(AB);
+            ABNormalise.Normalize();
+
+            AC = new V3(pointC - position);
+            ACNormalise = new V3(AC);
+            ACNormalise.Normalize();
+
+            normal = new V3(AB ^ AC);
+            normal.Normalize();
         }
 
         public Triangle(Texture tex, V3 pointA, V3 pointB, V3 pointC, V3 texA,V3 texB, V3 texC) : base(tex,"n",pointA) {
@@ -305,6 +320,16 @@ namespace Projet_IMA
             this.textureA = texA;
             this.textureB = texB;
             this.textureC = texC;
+            AB = new V3(pointB - position);
+            ABNormalise = new V3(AB);
+            ABNormalise.Normalize();
+
+            AC = new V3(pointC - position);
+            ACNormalise = new V3(AC);
+            ACNormalise.Normalize();
+
+            normal = new V3(AB ^ AC);
+            normal.Normalize();
         }
 
         public Triangle(Couleur chroma, string bumpMapLocation, V3 pointA, V3 pointB, V3 pointC) : base(chroma, bumpMapLocation, pointA)
@@ -314,6 +339,16 @@ namespace Projet_IMA
             this.textureA = new V3(0, 0, 0);
             this.textureB = new V3(0, 1, 0);
             this.textureC = new V3(1, 0, 0);
+            AB = new V3(pointB - position);
+            ABNormalise = new V3(AB);
+            ABNormalise.Normalize();
+
+            AC = new V3(pointC - position);
+            ACNormalise = new V3(AC);
+            ACNormalise.Normalize();
+
+            normal = new V3(AB ^ AC);
+            normal.Normalize();
         }
 
         public void Translate(V3 translator)
@@ -333,17 +368,6 @@ namespace Projet_IMA
         public override float IntersectRayon(V3 camera, V3 directionOculaire)
         {
             // A + alpha AB + beta AC
-            V3 AB = new V3(pointB - position);
-            V3 ABNormalise = new V3(AB);
-            ABNormalise.Normalize();
-
-            V3 AC = new V3(pointC - position);
-            V3 ACNormalise = new V3(AC);
-            ACNormalise.Normalize();
-
-            V3 normal = new V3(AB ^ AC);
-            normal.Normalize();
-
             float t = ((position - camera) * normal) / (directionOculaire * normal);
             V3 I = new V3(camera + t * directionOculaire);
             V3 AI = new V3(I - position);
@@ -414,17 +438,7 @@ namespace Projet_IMA
             V3 point = new V3(camera + intersection * directionOculaire);
             V3 AI = new V3(point - position);
 
-            V3 AB = new V3(pointB - position);
-            V3 ABNormalise = new V3(AB);
-            ABNormalise.Normalize();
-
-            V3 AC = new V3(pointC - position);
-            V3 ACNormalise = new V3(AC);
-            ACNormalise.Normalize();
-
-            V3 normal = new V3(AB ^ AC);
-            normal.Normalize();
-
+            
             float beta = (AI * AC) / (AC.Norm() * AC.Norm());
             float alpha = (AI * AB) / (AB.Norm() * AB.Norm());
 

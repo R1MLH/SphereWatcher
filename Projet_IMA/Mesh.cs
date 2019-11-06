@@ -38,7 +38,7 @@ namespace Projet_IMA
                     float a = float.Parse(items[1], CultureInfo.InvariantCulture);
                     float b = float.Parse(items[2], CultureInfo.InvariantCulture);
                     float c = float.Parse(items[3], CultureInfo.InvariantCulture);
-                    vertices.Add(new V3(a,b,c));
+                    vertices.Add(new V3(a,-c,b));
                 }
                 if (items[0] == "vt")
                 {
@@ -53,9 +53,15 @@ namespace Projet_IMA
                     string[] item1 = items[1].Split('/');
                     string[] item2 = items[2].Split('/');
                     string[] item3 = items[3].Split('/');
-                    Polygons.Add(new Triangle(this.texture,
-                                              vertices[(int.Parse(item1[0]))-1], vertices[(int.Parse(item2[0]))-1], vertices[(int.Parse(item3[0])-1)], 
-                                              vTex[(int.Parse(item1[1]))-1], vTex[(int.Parse(item2[1]))-1], vTex[(int.Parse(item3[1])-1)]));
+                    if (item1[1] != "" && item2[1] != "" && item2[3] != "")
+                        Polygons.Add(new Triangle(this.texture,
+                                                  vertices[(int.Parse(item1[0])) - 1], vertices[(int.Parse(item2[0])) - 1], vertices[(int.Parse(item3[0]) - 1)],
+                                                  vTex[(int.Parse(item1[1])) - 1], vTex[(int.Parse(item2[1])) - 1], vTex[(int.Parse(item3[1]) - 1)]));
+                    else
+                        Polygons.Add(new Triangle(this.texture,
+                                                  vertices[(int.Parse(item1[0])) - 1], vertices[(int.Parse(item2[0])) - 1], vertices[(int.Parse(item3[0]) - 1)],
+                                                  new V3(0, 0, 0), new V3(0, 1, 0), new V3(1, 0, 0)));
+                        
                 }
             }
         }
