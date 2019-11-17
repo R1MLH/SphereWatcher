@@ -83,6 +83,29 @@ namespace Projet_IMA
             Couleur[,] colorbuffer = new Couleur[xmax, ymax];
             for ( int x_ecran = 0; x_ecran < BitmapEcran.GetWidth(); x_ecran++)
             {
+                for(int y_ecran =0; y_ecran < BitmapEcran.GetHeight(); y_ecran++)
+                {
+                    V3 pixel = new V3((float)x_ecran, 0, (float)y_ecran);
+                    V3 rayon = pixel - camera;
+                    rayon.Normalize();
+                    colorbuffer[x_ecran, y_ecran] = Raycast(camera, rayon);
+
+                    BitmapEcran.DrawPixel(x_ecran, y_ecran, colorbuffer[x_ecran, y_ecran]);
+                }
+
+            }
+
+        }
+
+        public void DessineRaycastParallele()
+        {
+            V3 camera = new V3((float)BitmapEcran.GetWidth() / 2, (float)BitmapEcran.GetWidth() * -1.5f, (float)BitmapEcran.GetHeight() / 2);
+
+            int xmax = BitmapEcran.GetWidth();
+            int ymax = BitmapEcran.GetHeight();
+            Couleur[,] colorbuffer = new Couleur[xmax, ymax];
+            for ( int x_ecran = 0; x_ecran < BitmapEcran.GetWidth(); x_ecran++)
+            {
                 Parallel.For(0, BitmapEcran.GetHeight(), y_ecran => {
                     V3 pixel = new V3((float)x_ecran, 0, (float)y_ecran);
                     V3 rayon = pixel - camera;

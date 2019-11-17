@@ -25,9 +25,23 @@ namespace Projet_IMA
         private void button1_Click(object sender, EventArgs e)
         {
             BitmapEcran.RefreshScreen(new Couleur(0,0,0));
-            ProjetEleve.Go();
+            ProjetEleve.Scene1().DessineRaycast();
             BitmapEcran.Show();          
         }
 
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            BitmapEcran.RefreshScreen(new Couleur(0, 0, 0));
+            ProjetEleve.Scene2().DessineRaycast();
+            BitmapEcran.Show();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            BitmapEcran.RefreshScreen(new Couleur(0, 0, 0));
+            ProjetEleve.Scene2().DessineRaycastParallele();
+            BitmapEcran.Show();
+        }
     }
 }

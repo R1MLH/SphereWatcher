@@ -10,13 +10,18 @@ namespace Projet_IMA
 
         public static void Go()
         {
-            Random rand = new Random();
+        }
+
+
+        public static Scene Scene1()
+        {
             Couleur blanc = new Couleur(1.0f, 1.0f, 1.0f);
+            Scene scene = new Scene(blanc, 0.05f, 50);
+          
             Couleur orangesque = new Couleur(1.0f, 0.78f, 0.59f);
-            Couleur bleuesque = new Couleur(0.78f, 0.59f,1.0f);
+            Couleur bleuesque = new Couleur(0.78f, 0.59f, 1.0f);
             Couleur rouge = new Couleur(1.0f, 0.0f, 0.0f);
 
-            Scene scene1 = new Scene(blanc, 0.05f,50);
             /*
             Sphere sphere1 = new Sphere("carreau.jpg", "bump38.jpg", new V3(200.0f, 0.0f, 200.0f), 100.0f);
             scene1.AddObjet(sphere1);
@@ -42,13 +47,13 @@ namespace Projet_IMA
             */
             //Quadrilatere quad3 = new Quadrilatere(rouge, "n", new V3(0, 0, 0), new V3(10, 0, 0), new V3(0, 0, 10));
             //scene1.AddObjet(quad3);
-            
+
             Lumiere key = new LampeDirectionelle(orangesque, 0.48f, new V3(1.0f, -1.0f, 1.0f));
-            scene1.AddLampe(key);
+            scene.AddLampe(key);
             Lumiere fill = new LampeDirectionelle(bleuesque, 0.27f, new V3(-1.0f, -1.0f, 1.0f));
-            scene1.AddLampe(fill);
+            scene.AddLampe(fill);
             Lumiere back = new LampeDirectionelle(blanc, 0.2f, new V3(-1.0f, 1.0f, -1.0f));
-            scene1.AddLampe(back);
+            scene.AddLampe(back);
 
             /*Lumiere centrale = new LampePonctuelle(blanc, 0.5f, new V3(650.0f, 900.0f, 500.0f), 0.001f);
             scene1.AddLampe(centrale);
@@ -56,30 +61,39 @@ namespace Projet_IMA
             scene1.AddLampe(centrale);*/
 
 
-            
-            Mesh shrek = new Mesh("three_objects.obj","gold.jpg");
-            shrek.Rescale(100.0f);
-            shrek.Translate(new V3(500.0f, 300.0f, 100.0f));
 
-            foreach (Triangle t in shrek.GetPolygons())
+
+            return scene;
+        }
+
+        public static Scene Scene2()
+        {
+            Couleur blanc = new Couleur(1.0f, 1.0f, 1.0f);
+            Scene scene = new Scene(blanc, 0.05f, 50);
+            Couleur orangesque = new Couleur(1.0f, 0.78f, 0.59f);
+            Couleur bleuesque = new Couleur(0.78f, 0.59f, 1.0f);
+            Couleur rouge = new Couleur(1.0f, 0.0f, 0.0f);
+
+
+
+            Lumiere key = new LampeDirectionelle(orangesque, 0.48f, new V3(1.0f, -1.0f, 1.0f));
+            scene.AddLampe(key);
+            Lumiere fill = new LampeDirectionelle(bleuesque, 0.27f, new V3(-1.0f, -1.0f, 1.0f));
+            scene.AddLampe(fill);
+            Lumiere back = new LampeDirectionelle(blanc, 0.2f, new V3(-1.0f, 1.0f, -1.0f));
+            scene.AddLampe(back);
+
+            Mesh mesh = new Mesh("three_objects.obj", "gold.jpg");
+            mesh.Rescale(100.0f);
+            mesh.Translate(new V3(500.0f, 300.0f, 100.0f));
+
+            foreach (Triangle t in mesh.GetPolygons())
             {
-                scene1.AddObjet(t);
+                scene.AddObjet(t);
 
             }
 
-            
-            /*
-            Lumiere front = new LampeDirectionelle(blanc, 0.9f, new V3(0, 1, 0));
-            scene1.AddLampe(front);
-            Mesh testTriangle = new Mesh("test.obj","carreau.jpg");
-            testTriangle.Rescale(300.0f);
-            testTriangle.Translate(new V3(500.0f, 300.0f, 100.0f));
-            foreach (Triangle t in testTriangle.GetPolygons())
-            {
-                scene1.AddObjet(t);
-            }*/
-            scene1.DessineRaycast();
+            return scene;
         }
-
     }
 }
