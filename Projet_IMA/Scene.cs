@@ -91,17 +91,13 @@ namespace Projet_IMA
 
 
                 });
-            }
 
-            for (int x_ecran = 0; x_ecran < BitmapEcran.GetWidth(); x_ecran++)
-            {
-                for (int y_ecran = 0; y_ecran < BitmapEcran.GetHeight(); y_ecran++)
+                for(int y_ecran =0; y_ecran < BitmapEcran.GetHeight(); y_ecran++)
                 {
-
-                    BitmapEcran.DrawPixel(x_ecran, y_ecran, colorbuffer[x_ecran,y_ecran]);
-
+                    BitmapEcran.DrawPixel(x_ecran, y_ecran, colorbuffer[x_ecran, y_ecran]);
                 }
             }
+
         }
 
         public Couleur Raycast(V3 camera, V3 rayon)

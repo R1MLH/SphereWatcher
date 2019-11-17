@@ -57,8 +57,8 @@ namespace Projet_IMA
 
 
             
-            Mesh shrek = new Mesh("teapot.obj","gold.jpg");
-            shrek.Rescale(200.0f);
+            Mesh shrek = new Mesh("three_objects.obj","gold.jpg");
+            shrek.Rescale(100.0f);
             shrek.Translate(new V3(500.0f, 300.0f, 100.0f));
 
             foreach (Triangle t in shrek.GetPolygons())
