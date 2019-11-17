@@ -11,6 +11,13 @@ namespace Projet_IMA
         protected Texture BumpMap;
         protected V3 position;
 
+        protected Formes(Texture t, String bp, V3 position)
+        {
+            this.texture = t;
+            this.BumpMap = new Texture(bp);
+            this.position = position;
+        }
+
         protected Formes(String textureLocation,String bumpMapLocation, V3 position)
         {
             this.texture = new Texture(textureLocation);
@@ -273,4 +280,147 @@ namespace Projet_IMA
         }
 
     }
-}
+
+    class Triangle : Formes
+    {
+        V3 pointB;
+        V3 pointC;
+        V3 textureA;
+        V3 textureB;
+        V3 textureC;
+        V3 AB;
+        V3 AC;
+        V3 ABNormalise;
+        V3 ACNormalise;
+        V3 normal;
+        V3 ABprojector;
+        V3 ACprojector;
+
+
+
+        public Triangle(Texture tex, V3 pointA, V3 pointB, V3 pointC, V3 texA,V3 texB, V3 texC) : base(tex,"n",pointA) {
+            this.pointB = pointB;
+            this.pointC = pointC;
+            this.textureA = texA;
+            this.textureB = texB;
+            this.textureC = texC;
+            this.resetVectors();
+
+        }
+
+        private void resetVectors()
+        {
+            this.AB = new V3(pointB - this.position);
+            this.AC = new V3(pointC - this.position);
+            this.ABNormalise = new V3(AB);
+            ABNormalise.Normalize();
+            this.ACNormalise = new V3(AC);
+            ACNormalise.Normalize();
+            this.ABprojector = AC ^ normal;
+            this.ACprojector = normal ^ AB;
+            this.normal = new V3(AB ^ AC);
+            normal.Normalize();
+        }
+
+        public void Translate(V3 translator)
+        {
+            this.position = this.position + translator;
+            this.pointB = this.pointB + translator;
+            this.pointC = this.pointC + translator;
+            this.resetVectors();
+
+        }
+
+        public void Rescale(float factor)
+        {
+            this.position = this.position * factor;
+            this.pointB = this.pointB * factor;
+            this.pointC = this.pointC * factor;
+            this.resetVectors();
+        }
+
+        public override float IntersectRayon(V3 camera, V3 directionOculaire)
+        {
+            // A + alpha AB + beta AC
+
+            float t = ((position - camera) * normal) / (directionOculaire * normal);
+            V3 I = new V3(camera + t * directionOculaire);
+            V3 AI = new V3(I - position);
+
+            
+
+            float alpha = (AI * ABprojector) / (AB*ABprojector);
+            float beta = (AI * ACprojector) / (AC*ACprojector);
+
+           
+            if ( ((alpha + beta) >= 0) && ((alpha +beta) <= 1) && (beta >= 0) && (beta <= 1) && (alpha >= 0) &&( alpha < 1))
+            {
+                return t;
+            }
+            return -1;
+
+        }
+
+        public override List<PointColore> GeneratePositions()
+        {
+            float pas = 1;
+
+            List<PointColore> positions = new List<PointColore>();
+
+            for (float u = 0; u < AB.Norm(); u += pas)
+            {
+                for (float v = 0; v < AC.Norm(); v += pas)
+                {
+
+
+                    float offsetU = u / AB.Norm();
+                    float offsetV = v / AC.Norm();
+
+
+                    V3 dMdu = AB;
+                    V3 dMdv = AC;
+
+                    float dhdu, dhdv;
+                    BumpMap.Bump(offsetU, offsetV, out dhdu, out dhdv);
+
+                    V3 point = new V3(position + (u * ABNormalise) + (v * ACNormalise));
+
+
+                    V3 T2 = dMdu ^ (dhdv * normal);
+                    V3 T3 = (dhdu * normal) ^ dMdv;
+                    V3 normaleBump = normal + 0.08f * (T2 + T3);
+                    normaleBump.Normalize();
+
+                    positions.Add(new PointColore(point, normaleBump, texture.LireCouleur(offsetU, offsetV), this));
+                }
+            }
+            return positions;
+        }
+
+        public override PointColore GetCouleurIntersect(V3 camera, V3 directionOculaire, float intersection)
+        {
+            V3 point = new V3(camera + intersection * directionOculaire);
+            V3 AI = new V3(point - position);
+
+            float beta = (AI * AC) / (AC.Norm() * AC.Norm());
+            float alpha = (AI * AB) / (AB.Norm() * AB.Norm());
+
+
+            V3 dMdu = AB;
+            V3 dMdv = AC;
+
+            float dhdu, dhdv;
+            BumpMap.Bump(alpha, beta, out dhdu, out dhdv);
+
+            V3 T2 = dMdu ^ (dhdv * normal);
+            V3 T3 = (dhdu * normal) ^ dMdv;
+            V3 normaleBump = normal + 0.08f * (T2 + T3);
+            normaleBump.Normalize();
+
+            V3 positionCouleur = textureA + (alpha * (textureB - textureA) + beta * (textureC - textureA));
+
+            return new PointColore(point, normaleBump, texture.LireCouleur(positionCouleur.x, positionCouleur.y), this);
+
+        }
+    }
+    }

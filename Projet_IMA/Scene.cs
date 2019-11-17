@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Projet_IMA
 {
@@ -79,18 +80,24 @@ namespace Projet_IMA
 
             int xmax = BitmapEcran.GetWidth();
             int ymax = BitmapEcran.GetHeight();
+            Couleur[,] colorbuffer = new Couleur[xmax, ymax];
             for ( int x_ecran = 0; x_ecran < BitmapEcran.GetWidth(); x_ecran++)
             {
-                for( int y_ecran = 0; y_ecran < BitmapEcran.GetHeight(); y_ecran++)
-                {
+                Parallel.For(0, BitmapEcran.GetHeight(), y_ecran => {
                     V3 pixel = new V3((float)x_ecran, 0, (float)y_ecran);
                     V3 rayon = pixel - camera;
                     rayon.Normalize();
-                    Couleur c = Raycast(camera,rayon);
-                    BitmapEcran.DrawPixel(x_ecran, y_ecran, c);
+                    colorbuffer[x_ecran, y_ecran] = Raycast(camera, rayon);
 
+
+                });
+
+                for(int y_ecran =0; y_ecran < BitmapEcran.GetHeight(); y_ecran++)
+                {
+                    BitmapEcran.DrawPixel(x_ecran, y_ecran, colorbuffer[x_ecran, y_ecran]);
                 }
             }
+
         }
 
         public Couleur Raycast(V3 camera, V3 rayon)
