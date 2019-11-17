@@ -26,54 +26,6 @@ namespace Projet_IMA
         public void AddObjet(Formes objet) { objets.Add(objet); }
         public void AddLampe(Lumiere lampe) { lampes.Add(lampe); }
 
-        public void DessineSansLumiere()
-        {
-            float[,] ZBuffer = new float[BitmapEcran.GetWidth(), BitmapEcran.GetHeight()];
-            for (int xz = 0; xz < BitmapEcran.GetWidth(); xz++)
-                for (int yz = 0; yz < BitmapEcran.GetHeight(); yz++)
-                    ZBuffer[xz, yz] = float.MaxValue;
-            
-            foreach(Formes forme in objets)
-            {
-                foreach(PointColore point in forme.GeneratePositions())
-                {
-                    if (point.GetLoc().y < ZBuffer[(int)point.GetLoc().x, (int)point.GetLoc().z])
-                    {
-                        ZBuffer[(int)point.GetLoc().x, (int)point.GetLoc().z] = point.GetLoc().y;
-                        BitmapEcran.DrawPixel((int)point.GetLoc().x, (int)point.GetLoc().z, point.GetCouleur());
-                    }
-                }
-            }
-
-        }
-
-        public void Dessine()
-        {
-
-            float[,] ZBuffer = new float[BitmapEcran.GetWidth(), BitmapEcran.GetHeight()];
-            for (int xz = 0; xz < BitmapEcran.GetWidth(); xz++)
-                for (int yz = 0; yz < BitmapEcran.GetHeight(); yz++)
-                    ZBuffer[xz, yz] = float.MaxValue;
-
-            V3 camera = new V3((float)BitmapEcran.GetWidth() / 2,(float) BitmapEcran.GetWidth() * -1.5f, (float)BitmapEcran.GetHeight() / 2);
-            foreach (Formes forme in objets)
-            {
-                foreach (PointColore point in forme.GeneratePositions())
-                {
-                    if (point.GetLoc().x < BitmapEcran.GetWidth() && point.GetLoc().z < BitmapEcran.GetHeight() && (point.GetLoc().y < ZBuffer[(int)point.GetLoc().x, (int)point.GetLoc().z]))
-                    {
-                        ZBuffer[(int)point.GetLoc().x, (int)point.GetLoc().z] = point.GetLoc().y;
-
-                        V3 normalPoint = point.GetNormale();
-                        V3 directionOculaire = new V3(camera - point.GetLoc());
-                        //directionOculaire.Normalize();
-                        BitmapEcran.DrawPixel((int)point.GetLoc().x, (int)point.GetLoc().z, processLumiere(directionOculaire,point));
-                    }
-                }
-            }
-
-        }
-
         public void DessineRaycast()
         {
             V3 camera = new V3((float)BitmapEcran.GetWidth() / 2, (float)BitmapEcran.GetWidth() * -1.5f, (float)BitmapEcran.GetHeight() / 2);
@@ -123,7 +75,7 @@ namespace Projet_IMA
 
         }
 
-        public Couleur Raycast(V3 camera, V3 rayon)
+        private Couleur Raycast(V3 camera, V3 rayon)
         {
             Dictionary<float, Formes> intersections = new Dictionary<float, Formes>();
             foreach(Formes objet in objets){
@@ -144,7 +96,7 @@ namespace Projet_IMA
         }
 
 
-        public Couleur processLumiere(V3 rayon, PointColore point)
+        private Couleur processLumiere(V3 rayon, PointColore point)
         {
             V3 normalPoint = point.GetNormale();
             //V3 directionOculaire = new V3(camera - point.GetLoc());
